@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 A2111BU Ultrasonic Sensor - Continuous Distance Monitor
-Port: /dev/ttyTHS1 | Baud: 115200
+Port: /dev/ttyTHS2 | Baud: 115200
 Press Ctrl+C to stop
 """
 
@@ -9,7 +9,7 @@ import serial
 import time
 import sys
 
-PORT = '/dev/ttyTHS1'
+PORT = '/dev/ttyTHS2'
 BAUD = 115200
 
 ser = serial.Serial(PORT, BAUD, timeout=0.5)

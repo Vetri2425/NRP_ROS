@@ -151,7 +151,7 @@ import serial
 import time
 import sys
 
-device = sys.argv[1] if len(sys.argv) > 1 else "/dev/ttyACM0"
+device = sys.argv[1] if len(sys.argv) > 1 else "/dev/ttyTHS1"
 
 def send_at_command(ser, cmd, wait=1):
     """Send AT command and get response"""

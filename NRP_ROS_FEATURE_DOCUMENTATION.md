@@ -339,7 +339,7 @@ NRP_ROS/
 | Feature | Technical Details | Status | Last Modified | Data |
 |---------|------------------|--------|---------------|------|
 | **Sensor** | A2111BU (DYP A21 series) | Complete | Feb 20 2026 | - |
-| **Interface** | Serial `/dev/ttyTHS1` at 115200 baud | Complete | Feb 20 2026 | - |
+| **Interface** | Serial `/dev/ttyTHS2` at 115200 baud | Complete | Feb 20 2026 | - |
 | **Protocol** | 4-byte frames `[0xFF, High, Low, Checksum]` | Complete | - | - |
 | **Range** | 0–4000+ mm | Complete | - | - |
 | **Debounce** | 3 consecutive readings required | Complete | - | - |
@@ -548,11 +548,11 @@ NRP_ROS/
 | Component | Interface | Details |
 |-----------|-----------|---------|
 | Jetson Orin Nano Super | — | Main compute platform |
-| Pixhawk FCU | `/dev/ttyACM0` @ 115200 | ArduPilot firmware |
+| Pixhawk FCU | `/dev/ttyTHS1` @ 115200 | ArduPilot firmware |
 | Servo outputs | Channels 9–14 | Sprayer PWM control |
 | GPS | via MAVROS | RTK-capable |
 | LoRa receiver | USB (CH340) | RTCM correction relay |
-| Ultrasonic sensor | `/dev/ttyTHS1` @ 115200 | A2111BU obstacle detection |
+| Ultrasonic sensor | `/dev/ttyTHS2` @ 115200 | A2111BU obstacle detection |
 | WS2812 LEDs | `/dev/spidev0.0` @ 6.4 MHz | Mission state feedback |
 | Battery | via MAVROS | Voltage / current / percentage |
 | IMU | via MAVROS | Temperature monitoring |

@@ -819,7 +819,7 @@ def _shutdown_ros_runtime() -> None:
 
 os.environ["MAVROS_BRIDGE_HOST"] = "127.0.0.1"    # Local MAVROS instance
 os.environ["MAVROS_BRIDGE_PORT"] = "9090"         # rosbridge_server WebSocket port
-os.environ["MAVROS_FCU_URL"] = "/dev/ttyACM0:115200"  # Rover connection parameters
+os.environ["MAVROS_FCU_URL"] = "/dev/ttyTHS1:115200"  # Rover connection parameters
 
 
 # --- MAVROS Connection ---

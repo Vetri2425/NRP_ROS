@@ -126,7 +126,7 @@
 ### Connection Details
 
 - rosbridge WebSocket: `127.0.0.1:9090`
-- Pixhawk FCU: `/dev/ttyACM0` at 115200 baud
+- Pixhawk FCU: `/dev/ttyTHS1` at 115200 baud
 - MAVROS mode: APM (ArduPilot)
 
 ---
@@ -239,7 +239,7 @@ IDLE → MONITORING → TRIGGERED → AWAITING_ACK → STABLE_WINDOW → READY_R
 | Feature | Details |
 |---------|---------|
 | Sensor | A2111BU (DYP A21 series) |
-| Interface | Serial `/dev/ttyTHS1` at 115200 baud |
+| Interface | Serial `/dev/ttyTHS2` at 115200 baud |
 | Protocol | 4-byte frames `[0xFF, High, Low, Checksum]` |
 | Range | 0–4000+ mm |
 | Debounce | 3 consecutive readings required |
@@ -351,11 +351,11 @@ IDLE → MONITORING → TRIGGERED → AWAITING_ACK → STABLE_WINDOW → READY_R
 | Component | Interface | Details |
 |-----------|-----------|---------|
 | Jetson Orin Nano Super | — | Main compute platform |
-| Pixhawk FCU | `/dev/ttyACM0` @ 115200 | ArduPilot firmware |
+| Pixhawk FCU | `/dev/ttyTHS1` @ 115200 | ArduPilot firmware |
 | Servo outputs | Channels 9–14 | Sprayer PWM control |
 | GPS | via MAVROS | RTK-capable |
 | LoRa receiver | USB (CH340) | RTCM correction relay |
-| Ultrasonic sensor | `/dev/ttyTHS1` @ 115200 | A2111BU obstacle detection |
+| Ultrasonic sensor | `/dev/ttyTHS2` @ 115200 | A2111BU obstacle detection |
 | WS2812 LEDs | `/dev/spidev0.0` @ 6.4 MHz | Mission state feedback |
 | Battery | via MAVROS | Voltage / current / percentage |
 | IMU | via MAVROS | Temperature monitoring |
@@ -371,7 +371,7 @@ IDLE → MONITORING → TRIGGERED → AWAITING_ACK → STABLE_WINDOW → READY_R
 
 1. ROS2 environment (`/opt/ros/humble/setup.bash`)
 2. rosbridge_server (port 9090)
-3. MAVROS APM (`/dev/ttyACM0:115200`)
+3. MAVROS APM (`/dev/ttyTHS1:115200`)
 4. GPS Altitude Corrector (ROS2 node)
 5. Telemetry Node (ROS2 node)
 6. Backend server (FastAPI/uvicorn on port 5001)

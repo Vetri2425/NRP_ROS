@@ -163,7 +163,7 @@ start_ros_process "rosbridge_server" \
     "/rosbridge_websocket" || exit 1
 
 start_ros_process "MAVROS" \
-    "ros2 launch mavros apm.launch fcu_url:=/dev/ttyACM0:115200 gcs_url:=tcp-l://:5760" \
+    "ros2 launch mavros apm.launch fcu_url:=/dev/ttyTHS1:115200 gcs_url:=tcp-l://:5760" \
     "/mavros" || exit 1
 
 start_ros_process "GPS Altitude Corrector" \

@@ -264,7 +264,7 @@ class NetworkMonitor:
         This is a placeholder implementation. Customize based on your LoRa hardware:
         
         Option 1 - Serial port check:
-            return os.path.exists('/dev/ttyACM0') or os.path.exists('/dev/ttyACM1')
+            return os.path.exists('/dev/ttyTHS1') or os.path.exists('/dev/ttyACM1')
         
         Option 2 - Check for LoRa process:
             result = subprocess.run(['pgrep', '-f', 'lora'], capture_output=True)
@@ -291,7 +291,7 @@ class NetworkMonitor:
             # Currently returns False (no LoRa)
             
             # Example: Check if LoRa serial device exists
-            lora_devices = ['/dev/ttyACM0', '/dev/ttyACM1', '/dev/ttyS0']
+            lora_devices = ['/dev/ttyTHS1', '/dev/ttyACM1', '/dev/ttyS0']
             for device in lora_devices:
                 if os.path.exists(device):
                     # Device exists, but you might want to do a more robust check

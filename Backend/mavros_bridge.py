@@ -93,7 +93,7 @@ class MavrosBridge:
     ) -> None:
         self.host = host or os.getenv("MAVROS_BRIDGE_HOST", "127.0.0.1")
         self.port = int(port if port is not None else os.getenv("MAVROS_BRIDGE_PORT", "9090"))  # rosbridge_server WebSocket port
-        self.fcu_url = os.getenv("MAVROS_FCU_URL", "/dev/ttyACM0:115200")
+        self.fcu_url = os.getenv("MAVROS_FCU_URL", "/dev/ttyTHS1:115200")
 
         # ...existing code...
         self._ros = roslibpy.Ros(host=self.host, port=self.port)

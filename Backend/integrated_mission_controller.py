@@ -164,7 +164,7 @@ class IntegratedMissionController:
                 )
                 # Update zone thresholds after initialization (if the monitor supports it)
                 # For now, zone thresholds are class constants, so they're set at class level
-                self.log("Obstacle monitor initialized (A2111BU on /dev/ttyTHS1) - disabled by default")
+                self.log("Obstacle monitor initialized (A2111BU on /dev/ttyTHS2) - disabled by default")
             except Exception as e:
                 self.log(f"Warning: Failed to initialize obstacle monitor: {e}", "warning")
                 self.obstacle_monitor = None

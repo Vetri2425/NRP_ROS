@@ -32,8 +32,8 @@ def find_serial_ports():
     ports = []
     # Common Jetson UART ports
     candidates = [
-        "/dev/ttyTHS0", "/dev/ttyTHS1", "/dev/ttyTHS2",
-        "/dev/ttyACM0", "/dev/ttyUSB1",
+        "/dev/ttyTHS0", "/dev/ttyTHS2", "/dev/ttyTHS2",
+        "/dev/ttyTHS1", "/dev/ttyUSB1",
         "/dev/ttyAMA0", "/dev/ttyAMA1",
         "/dev/ttyS0", "/dev/ttyS1", "/dev/ttyS2",
     ]
@@ -383,7 +383,7 @@ def main():
     print()
     print("  2. SENSOR MODEL: Your A0221AM may be UART mode,")
     print("     not PWM. Connect sensor TX to a Jetson UART RX:")
-    print("     - Pin 10 (RXD) = /dev/ttyTHS0 or /dev/ttyTHS1")
+    print("     - Pin 10 (RXD) = /dev/ttyTHS0 or /dev/ttyTHS2")
     print("     - Check: ls /dev/ttyTHS*")
     print()
     print("  3. GPIO pins 29/31 are NOT hardware UART pins.")
@@ -394,7 +394,7 @@ def main():
     print("  4. VOLTAGE: Sensor TX may be 5V logic.")
     print("     Jetson GPIO is 3.3V. Use voltage divider if needed.")
     print()
-    print("  5. Try: sudo cat /dev/ttyTHS1 | xxd | head")
+    print("  5. Try: sudo cat /dev/ttyTHS2 | xxd | head")
     print("     to check if any serial data appears on UART ports.")
 
 

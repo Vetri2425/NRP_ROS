@@ -4,7 +4,7 @@ A2111BU Ultrasonic Obstacle Monitor
 Reads distance from DYP A21 series sensor via UART and triggers callbacks
 when objects enter warning or danger zones.
 
-Port: /dev/ttyTHS1 | Baud: 115200
+Port: /dev/ttyTHS2 | Baud: 115200
 Protocol: 4-byte frames [0xFF, HighByte, LowByte, Checksum]
 """
 
@@ -28,7 +28,7 @@ class ObstacleMonitor:
     # Logging interval (seconds) for periodic distance reports
     LOG_INTERVAL = 1.0
 
-    def __init__(self, port: str = '/dev/ttyTHS1', baud: int = 115200,
+    def __init__(self, port: str = '/dev/ttyTHS2', baud: int = 115200,
                  callback: Optional[Callable] = None, logger=None):
         self.port = port
         self.baud = baud

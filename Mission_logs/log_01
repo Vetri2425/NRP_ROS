@@ -1,5 +1,5 @@
 ar 04 12:57:40 ubuntu nrp-service[51855]: [MISSION_CONTROLLER] [2026-03-04 12:57:40.195] GPS Failsafe Monitor initialized
-Mar 04 12:57:40 ubuntu nrp-service[51855]: [MISSION_CONTROLLER] [2026-03-04 12:57:40.195] Obstacle monitor initialized (A2111BU on /dev/ttyTHS1) - disabled by default
+Mar 04 12:57:40 ubuntu nrp-service[51855]: [MISSION_CONTROLLER] [2026-03-04 12:57:40.195] Obstacle monitor initialized (A2111BU on /dev/ttyTHS2) - disabled by default
 Mar 04 12:57:40 ubuntu nrp-service[51855]: [MISSION_CONTROLLER] [2026-03-04 12:57:40.195] Subscribed to telemetry updates
 Mar 04 12:57:40 ubuntu nrp-service[51855]: [MISSION_CONTROLLER] [2026-03-04 12:57:40.195] Mission controller initialized
 Mar 04 12:57:40 ubuntu nrp-service[51855]: [MISSION_CONTROLLER] [2026-03-04 12:57:40.195] [GPS_FAILSAFE] Mode changed: disable → strict
@@ -62,7 +62,7 @@ Mar 04 13:04:31 ubuntu nrp-service[54188]: [mavros_node-1] [INFO] [1772609671.15
 Mar 04 13:04:31 ubuntu nrp-service[54188]: [mavros_node-1] [INFO] [1772609671.151225502] [mavros.rallypoint]: RP: Using MISSION_ITEM_INT
 Mar 04 13:04:31 ubuntu nrp-service[54188]: [mavros_node-1] [INFO] [1772609671.151258560] [mavros.mission]: WP: Using MISSION_ITEM_INT
 Mar 04 13:04:37 ubuntu nrp-service[54285]: [MISSION_CONTROLLER] [2026-03-04 13:04:37.939] GPS Failsafe Monitor initialized
-Mar 04 13:04:37 ubuntu nrp-service[54285]: [MISSION_CONTROLLER] [2026-03-04 13:04:37.939] Obstacle monitor initialized (A2111BU on /dev/ttyTHS1) - disabled by default
+Mar 04 13:04:37 ubuntu nrp-service[54285]: [MISSION_CONTROLLER] [2026-03-04 13:04:37.939] Obstacle monitor initialized (A2111BU on /dev/ttyTHS2) - disabled by default
 Mar 04 13:04:37 ubuntu nrp-service[54285]: [MISSION_CONTROLLER] [2026-03-04 13:04:37.939] Subscribed to telemetry updates
 Mar 04 13:04:37 ubuntu nrp-service[54285]: [MISSION_CONTROLLER] [2026-03-04 13:04:37.939] Mission controller initialized
 Mar 04 13:04:37 ubuntu nrp-service[54285]: [MISSION_CONTROLLER] [2026-03-04 13:04:37.939] [GPS_FAILSAFE] Mode changed: disable → strict
@@ -89,7 +89,7 @@ Mar 04 13:06:03 ubuntu nrp-service[54755]: [mavros_node-1] [INFO] [1772609763.47
 Mar 04 13:06:03 ubuntu nrp-service[54755]: [mavros_node-1] [INFO] [1772609763.475310721] [mavros.rallypoint]: RP: Using MISSION_ITEM_INT
 Mar 04 13:06:03 ubuntu nrp-service[54755]: [mavros_node-1] [INFO] [1772609763.475346242] [mavros.mission]: WP: Using MISSION_ITEM_INT
 Mar 04 13:06:07 ubuntu nrp-service[54882]: [MISSION_CONTROLLER] [2026-03-04 13:06:07.786] GPS Failsafe Monitor initialized
-Mar 04 13:06:07 ubuntu nrp-service[54882]: [MISSION_CONTROLLER] [2026-03-04 13:06:07.786] Obstacle monitor initialized (A2111BU on /dev/ttyTHS1) - disabled by default
+Mar 04 13:06:07 ubuntu nrp-service[54882]: [MISSION_CONTROLLER] [2026-03-04 13:06:07.786] Obstacle monitor initialized (A2111BU on /dev/ttyTHS2) - disabled by default
 Mar 04 13:06:07 ubuntu nrp-service[54882]: [MISSION_CONTROLLER] [2026-03-04 13:06:07.786] Subscribed to telemetry updates
 Mar 04 13:06:07 ubuntu nrp-service[54882]: [MISSION_CONTROLLER] [2026-03-04 13:06:07.786] Mission controller initialized
 Mar 04 13:06:07 ubuntu nrp-service[54882]: [MISSION_CONTROLLER] [2026-03-04 13:06:07.786] [GPS_FAILSAFE] Mode changed: disable → strict
@@ -98,7 +98,7 @@ Mar 04 13:09:42 ubuntu nrp-service[55361]: [mavros_node-1] [INFO] [1772609982.18
 Mar 04 13:09:42 ubuntu nrp-service[55361]: [mavros_node-1] [INFO] [1772609982.181350545] [mavros.rallypoint]: RP: Using MISSION_ITEM_INT
 Mar 04 13:09:42 ubuntu nrp-service[55361]: [mavros_node-1] [INFO] [1772609982.181451796] [mavros.mission]: WP: Using MISSION_ITEM_INT
 Mar 04 13:09:51 ubuntu nrp-service[55464]: [MISSION_CONTROLLER] [2026-03-04 13:09:51.065] GPS Failsafe Monitor initialized
-Mar 04 13:09:51 ubuntu nrp-service[55464]: [MISSION_CONTROLLER] [2026-03-04 13:09:51.065] Obstacle monitor initialized (A2111BU on /dev/ttyTHS1) - disabled by default
+Mar 04 13:09:51 ubuntu nrp-service[55464]: [MISSION_CONTROLLER] [2026-03-04 13:09:51.065] Obstacle monitor initialized (A2111BU on /dev/ttyTHS2) - disabled by default
 Mar 04 13:09:51 ubuntu nrp-service[55464]: [MISSION_CONTROLLER] [2026-03-04 13:09:51.065] Subscribed to telemetry updates
 Mar 04 13:09:51 ubuntu nrp-service[55464]: [MISSION_CONTROLLER] [2026-03-04 13:09:51.067] Mission controller initialized
 Mar 04 13:09:51 ubuntu nrp-service[55464]: [MISSION_CONTROLLER] [2026-03-04 13:09:51.067] [GPS_FAILSAFE] Mode changed: disable → strict
