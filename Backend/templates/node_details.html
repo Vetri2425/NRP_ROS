@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Node Details - {{ node_name }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    background-color: #0f172a;
+    color: #e2e8f0;
+}
+header {
+    background: #111827;
+    padding: 1rem 1.5rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border-bottom: 1px solid #1f2937;
+}
+.page {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.back-link {
+    color: #3b82f6;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+.back-link:hover {
+    text-decoration: underline;
+}
+.node-info {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+.node-info h2 {
+    margin-top: 0;
+    color: #60a5fa;
+}
+.topic-section {
+    margin-bottom: 1.5rem;
+}
+.topic-section h3 {
+    color: #34d399;
+    margin-bottom: 0.5rem;
+}
+.topic-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.topic-item {
+    background: #1f2937;
+    padding: 0.75rem;
+    border-radius: 0.35rem;
+    border: 1px solid #374151;
+}
+.topic-name {
+    font-weight: bold;
+    color: #fbbf24;
+    font-family: Consolas, Menlo, Monaco, monospace;
+}
+.topic-type {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+.live-data {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+.live-data h3 {
+    color: #f87171;
+    margin-top: 0;
+}
+.data-display {
+    background: #0f172a;
+    border: 1px solid #1f2937;
+    border-radius: 0.35rem;
+    padding: 0.75rem;
+    font-family: Consolas, Menlo, Monaco, monospace;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow-y: auto;
+    font-size: 0.85rem;
+}
+.status-strip {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+.status-pill {
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.status-pill.ok {
+    background: #047857;
+    color: #d1fae5;
+}
+.status-pill.warn {
+    background: #b91c1c;
+    color: #fee2e2;
+}
+</style>
+</head>
+<body>
+<header>Node Details - {{ node_name }}</header>
+<div class="page">
+    <a href="/monitor" class="back-link">← Back to Monitor</a>
+
+    <div class="status-strip">
+        <span>Node: <span id="node-status" class="status-pill warn">Loading</span></span>
+        <span>Last update: <span id="last-update">-</span></span>
+    </div>
+
+    <div class="node-info">
+        <h2>Node Information</h2>
+        <div id="node-details">Loading...</div>
+    </div>
+
+    <div class="live-data">
+        <h3>Live Topic Data</h3>
+        <p>Select a topic above to view live data</p>
+        <div id="live-data-display" class="data-display" style="display: none;"></div>
+    </div>
+</div>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+<script>
+(function () {
+    const nodeName = '{{ node_name }}';
+    let nodeInfo = null;
+    let selectedTopic = null;
+
+    function updateNodeStatus(status, message) {
+        const statusEl = document.getElementById('node-status');
+        statusEl.textContent = message;
+        statusEl.className = 'status-pill ' + (status === 'ok' ? 'ok' : 'warn');
+    }
+
+    function displayNodeInfo(info) {
+        nodeInfo = info;
+        const detailsEl = document.getElementById('node-details');
+
+        let html = '';
+
+        // Publishers
+        if (info.publishers && info.publishers.length > 0) {
+            html += '<div class="topic-section">';
+            html += '<h3>📤 Publishers</h3>';
+            html += '<div class="topic-list">';
+            info.publishers.forEach(pub => {
+                html += `<div class="topic-item" onclick="selectTopic('${pub.name}', 'publisher')">`;
+                html += `<div class="topic-name">${pub.name}</div>`;
+                html += `<div class="topic-type">${pub.type}</div>`;
+                html += '</div>';
+            });
+            html += '</div></div>';
+        }
+
+        // Subscribers
+        if (info.subscribers && info.subscribers.length > 0) {
+            html += '<div class="topic-section">';
+            html += '<h3>📥 Subscribers</h3>';
+            html += '<div class="topic-list">';
+            info.subscribers.forEach(sub => {
+                html += `<div class="topic-item" onclick="selectTopic('${sub.name}', 'subscriber')">`;
+                html += `<div class="topic-name">${sub.name}</div>`;
+                html += `<div class="topic-type">${sub.type}</div>`;
+                html += '</div>';
+            });
+            html += '</div></div>';
+        }
+
+        // Service Servers
+        if (info.service_servers && info.service_servers.length > 0) {
+            html += '<div class="topic-section">';
+            html += '<h3>🔧 Service Servers</h3>';
+            html += '<div class="topic-list">';
+            info.service_servers.forEach(srv => {
+                html += `<div class="topic-item">`;
+                html += `<div class="topic-name">${srv.name}</div>`;
+                html += `<div class="topic-type">${srv.type}</div>`;
+                html += '</div>';
+            });
+            html += '</div></div>';
+        }
+
+        // Service Clients
+        if (info.service_clients && info.service_clients.length > 0) {
+            html += '<div class="topic-section">';
+            html += '<h3>🔗 Service Clients</h3>';
+            html += '<div class="topic-list">';
+            info.service_clients.forEach(cli => {
+                html += `<div class="topic-item">`;
+                html += `<div class="topic-name">${cli.name}</div>`;
+                html += `<div class="topic-type">${cli.type}</div>`;
+                html += '</div>';
+            });
+            html += '</div></div>';
+        }
+
+        detailsEl.innerHTML = html;
+    }
+
+    function selectTopic(topicName, type) {
+        selectedTopic = { name: topicName, type: type };
+        const displayEl = document.getElementById('live-data-display');
+        displayEl.style.display = 'block';
+        displayEl.textContent = `Monitoring ${type}: ${topicName}\n\nWaiting for data...`;
+
+        // Here you would set up ROS topic subscription
+        // For now, just show that it's selected
+    }
+
+    async function loadNodeInfo() {
+        try {
+            const response = await fetch(`/api/node/${encodeURIComponent(nodeName)}`);
+            if (response.ok) {
+                const info = await response.json();
+                displayNodeInfo(info);
+                updateNodeStatus('ok', 'Active');
+                document.getElementById('last-update').textContent = new Date().toLocaleTimeString();
+            } else {
+                updateNodeStatus('warn', 'Not Found');
+                document.getElementById('node-details').textContent = 'Node not found or ROS not available.';
+            }
+        } catch (err) {
+            console.error('Failed to load node info', err);
+            updateNodeStatus('warn', 'Error');
+            document.getElementById('node-details').textContent = 'Failed to load node information.';
+        }
+    }
+
+    // Make selectTopic global so onclick can access it
+    window.selectTopic = selectTopic;
+
+    // Load node info on page load
+    loadNodeInfo();
+
+    // Set up periodic refresh
+    setInterval(loadNodeInfo, 5000);
+})();
+</script>
+</body>
+</html>

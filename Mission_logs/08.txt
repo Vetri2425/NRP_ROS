@@ -1,0 +1,336 @@
+Mar 04 17:28:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:08.737] MISSION MODE CHANGED: auto → auto
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.791] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.791] 📥 COMMAND RECEIVED: LOAD_MISSION
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.791] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.791] 📦 Received 2 waypoint(s) in load_mission command
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.791] ✓ Validating waypoints...
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.791] ✓ All waypoints validated successfully
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.791] 📝 Setting mission state: IDLE → READY
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.791] ═══════════════════════════════════════════════════
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.791] MISSION LOADED: 2 waypoints
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.791] Mission Mode: auto
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.791] Waypoint Threshold: 0.25m
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.792] Hold Duration: 0s
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.792] Servo Config: channel=9, pwm_on=2300, pwm_off=1750
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.792] Servo Timing: before=0.0s, spray=0.2s, after=0.0s, enabled=True
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.792]   WP1: lat=13.072071624, lng=80.261948104, alt=50m [MARK]
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.792]   WP2: lat=13.072051058, lng=80.261963974, alt=50m [MARK]
+Mar 04 17:28:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:09.792] ═══════════════════════════════════════════════════
+Mar 04 17:28:32 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:32.584] MISSION MODE CHANGED: auto → auto
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.920] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.920] 📥 COMMAND RECEIVED: LOAD_MISSION
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.920] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.920] 📦 Received 2 waypoint(s) in load_mission command
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.920] ✓ Validating waypoints...
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.920] ✓ All waypoints validated successfully
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.920] 📝 Setting mission state: IDLE → READY
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.920] ═══════════════════════════════════════════════════
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.920] MISSION LOADED: 2 waypoints
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.920] Mission Mode: auto
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.921] Waypoint Threshold: 0.25m
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.921] Hold Duration: 0s
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.921] Servo Config: channel=9, pwm_on=2300, pwm_off=1750
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.921] Servo Timing: before=0.0s, spray=0.2s, after=0.0s, enabled=True
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.921]   WP1: lat=13.072071624, lng=80.261948104, alt=50m [MARK]
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.921]   WP2: lat=13.072051058, lng=80.261963974, alt=50m [MARK]
+Mar 04 17:28:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:28:33.921] ═══════════════════════════════════════════════════
+Mar 04 17:29:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:08.936] MISSION MODE CHANGED: auto → continuous
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.694] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.697] 📥 COMMAND RECEIVED: START
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.700] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.702] 🎬 START command received
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.703] Current state: ready
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.703] Waypoints loaded: 2
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.703] ⚡ Verifying vehicle armed state before mission start...
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.704] ✓ Pixhawk already armed
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.704] ✅ Vehicle armed — proceeding with mission start
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.704] [GPS_FAILSAFE] Mission started (failsafe DISABLED)
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.705] ═══════════════════════════════════════════════════
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.705] 🚀 MISSION STARTED
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.705] Starting from waypoint 1/2
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.705] Mission Mode: continuous
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.705] GPS Failsafe Mode: disable
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.705] ═══════════════════════════════════════════════════
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.711] ═══════════════════════════════════════════════════
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.713] 🎯 MULTI-WAYPOINT UPLOAD (continuous mode)
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.713] Uploading 2 waypoints to Pixhawk at once
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.717] ═══════════════════════════════════════════════════
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.719] Built 3 waypoints (1 HOME + 2 mission)
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.719] 🏠 HOME will be: lat=13.072049, lng=80.261962, alt=18.6m
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.720] ✓ ArduPilot will auto-set HOME on ARM at current position
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.720] 🗑️ Clearing existing waypoints...
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.737] ✓ Cleared existing waypoints
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.739] 📤 Uploading 3 waypoints to Pixhawk...
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.836] ✅ Upload successful
+Mar 04 17:29:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:17.836] ⏱ Verifying upload (attempt 1/3, waiting 1.0s)...
+Mar 04 17:29:48 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:48.838] Verification attempt 1 error: Service call timeout for /mavros/mission/pull
+Mar 04 17:29:48 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:29:48.839] ⏱ Verifying upload (attempt 2/3, waiting 1.5s)...
+Mar 04 17:30:20 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:20.343] Verification attempt 2 error: Service call timeout for /mavros/mission/pull
+Mar 04 17:30:20 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:20.344] ⏱ Verifying upload (attempt 3/3, waiting 2.0s)...
+Mar 04 17:30:52 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:52.347] Verification attempt 3 error: Service call timeout for /mavros/mission/pull
+Mar 04 17:30:52 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:52.348] ⚠ Verification incomplete after 3 attempts, proceeding anyway
+Mar 04 17:30:52 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:52.348] 🎯 Setting current waypoint to 1 (first mission target)
+Mar 04 17:30:52 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:52.423] ✓ Pixhawk already armed
+Mar 04 17:30:52 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:52.423] 🔄 Setting AUTO mode...
+Mar 04 17:30:52 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:52.423] 🔄 MODE CHANGE: HOLD → AUTO
+Mar 04 17:30:52 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:52.437] ✅ PIXHAWK MODE CHANGED TO: AUTO
+Mar 04 17:30:52 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:52.438] ✅ AUTO mode set - rover will navigate all 2 waypoints
+Mar 04 17:30:52 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:52.441] 📊 Started periodic status logging at 2Hz
+Mar 04 17:30:52 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:52.447] 📍 Status: WP1/2 | Distance: 2.92m | Mode: HOLD | Armed: YES | Pos: (13.072049, 80.261962)
+Mar 04 17:30:52 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:52.448] 📊 Distance monitor: WP1 is 2.92m away (waiting for Pixhawk topic)
+Mar 04 17:30:52 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:52.650] 📍 Status: WP1/2 | Distance: 2.92m | Mode: HOLD | Armed: YES | Pos: (13.072049, 80.261962)
+Mar 04 17:30:52 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:52.859] 📍 Status: WP1/2 | Distance: 2.92m | Mode: HOLD | Armed: YES | Pos: (13.072049, 80.261962)
+Mar 04 17:30:53 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:53.066] 📍 Status: WP1/2 | Distance: 2.92m | Mode: HOLD | Armed: YES | Pos: (13.072049, 80.261962)
+Mar 04 17:30:53 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:53.277] 📍 Status: WP1/2 | Distance: 2.93m | Mode: HOLD | Armed: YES | Pos: (13.072049, 80.261962)
+Mar 04 17:30:53 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:53.479] 📍 Status: WP1/2 | Distance: 2.93m | Mode: HOLD | Armed: YES | Pos: (13.072049, 80.261962)
+Mar 04 17:30:53 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:53.681] 📍 Status: WP1/2 | Distance: 2.93m | Mode: HOLD | Armed: YES | Pos: (13.072049, 80.261962)
+Mar 04 17:30:53 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:53.885] 📍 Status: WP1/2 | Distance: 2.92m | Mode: HOLD | Armed: YES | Pos: (13.072049, 80.261962)
+Mar 04 17:30:54 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:54.087] 📍 Status: WP1/2 | Distance: 2.92m | Mode: HOLD | Armed: YES | Pos: (13.072049, 80.261962)
+Mar 04 17:30:54 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:54.294] 📍 Status: WP1/2 | Distance: 2.92m | Mode: AUTO | Armed: YES | Pos: (13.072049, 80.261962)
+Mar 04 17:30:54 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:54.496] 📍 Status: WP1/2 | Distance: 2.95m | Mode: AUTO | Armed: YES | Pos: (13.072048, 80.261962)
+Mar 04 17:30:54 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:54.697] 📍 Status: WP1/2 | Distance: 2.95m | Mode: AUTO | Armed: YES | Pos: (13.072048, 80.261962)
+Mar 04 17:30:54 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:54.898] 📍 Status: WP1/2 | Distance: 2.99m | Mode: AUTO | Armed: YES | Pos: (13.072048, 80.261961)
+Mar 04 17:30:55 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:55.098] 📍 Status: WP1/2 | Distance: 2.99m | Mode: AUTO | Armed: YES | Pos: (13.072048, 80.261961)
+Mar 04 17:30:55 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:55.299] 📍 Status: WP1/2 | Distance: 2.99m | Mode: AUTO | Armed: YES | Pos: (13.072048, 80.261961)
+Mar 04 17:30:55 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:55.500] 📍 Status: WP1/2 | Distance: 3.16m | Mode: AUTO | Armed: YES | Pos: (13.072046, 80.261961)
+Mar 04 17:30:55 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:55.702] 📍 Status: WP1/2 | Distance: 3.16m | Mode: AUTO | Armed: YES | Pos: (13.072046, 80.261961)
+Mar 04 17:30:55 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:55.906] 📍 Status: WP1/2 | Distance: 3.28m | Mode: AUTO | Armed: YES | Pos: (13.072045, 80.261961)
+Mar 04 17:30:56 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:56.108] 📍 Status: WP1/2 | Distance: 3.28m | Mode: AUTO | Armed: YES | Pos: (13.072045, 80.261961)
+Mar 04 17:30:56 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:56.309] 📍 Status: WP1/2 | Distance: 3.28m | Mode: AUTO | Armed: YES | Pos: (13.072045, 80.261961)
+Mar 04 17:30:56 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:56.510] 📍 Status: WP1/2 | Distance: 3.44m | Mode: AUTO | Armed: YES | Pos: (13.072044, 80.261963)
+Mar 04 17:30:56 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:56.711] 📍 Status: WP1/2 | Distance: 3.44m | Mode: AUTO | Armed: YES | Pos: (13.072044, 80.261963)
+Mar 04 17:30:56 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:56.917] 📍 Status: WP1/2 | Distance: 3.51m | Mode: AUTO | Armed: YES | Pos: (13.072044, 80.261964)
+Mar 04 17:30:57 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:57.121] 📍 Status: WP1/2 | Distance: 3.51m | Mode: AUTO | Armed: YES | Pos: (13.072044, 80.261964)
+Mar 04 17:30:57 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:57.322] 📍 Status: WP1/2 | Distance: 3.51m | Mode: AUTO | Armed: YES | Pos: (13.072044, 80.261964)
+Mar 04 17:30:57 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:57.523] 📍 Status: WP1/2 | Distance: 3.54m | Mode: AUTO | Armed: YES | Pos: (13.072044, 80.261965)
+Mar 04 17:30:57 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:57.724] 📍 Status: WP1/2 | Distance: 3.54m | Mode: AUTO | Armed: YES | Pos: (13.072044, 80.261965)
+Mar 04 17:30:57 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:57.852] 📊 Distance monitor: WP1 is 3.53m away (waiting for Pixhawk topic)
+Mar 04 17:30:57 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:57.928] 📍 Status: WP1/2 | Distance: 3.53m | Mode: AUTO | Armed: YES | Pos: (13.072044, 80.261965)
+Mar 04 17:30:58 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:58.129] 📍 Status: WP1/2 | Distance: 3.53m | Mode: AUTO | Armed: YES | Pos: (13.072044, 80.261965)
+Mar 04 17:30:58 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:58.329] 📍 Status: WP1/2 | Distance: 3.53m | Mode: AUTO | Armed: YES | Pos: (13.072044, 80.261965)
+Mar 04 17:30:58 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:58.530] 📍 Status: WP1/2 | Distance: 3.47m | Mode: AUTO | Armed: YES | Pos: (13.072045, 80.261965)
+Mar 04 17:30:58 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:58.731] 📍 Status: WP1/2 | Distance: 3.47m | Mode: AUTO | Armed: YES | Pos: (13.072045, 80.261965)
+Mar 04 17:30:58 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:58.931] 📍 Status: WP1/2 | Distance: 3.36m | Mode: AUTO | Armed: YES | Pos: (13.072046, 80.261964)
+Mar 04 17:30:59 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:59.133] 📍 Status: WP1/2 | Distance: 3.36m | Mode: AUTO | Armed: YES | Pos: (13.072046, 80.261964)
+Mar 04 17:30:59 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:59.334] 📍 Status: WP1/2 | Distance: 3.36m | Mode: AUTO | Armed: YES | Pos: (13.072046, 80.261964)
+Mar 04 17:30:59 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:59.535] 📍 Status: WP1/2 | Distance: 3.20m | Mode: AUTO | Armed: YES | Pos: (13.072047, 80.261963)
+Mar 04 17:30:59 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:59.738] 📍 Status: WP1/2 | Distance: 3.20m | Mode: AUTO | Armed: YES | Pos: (13.072047, 80.261963)
+Mar 04 17:30:59 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:30:59.940] 📍 Status: WP1/2 | Distance: 2.98m | Mode: AUTO | Armed: YES | Pos: (13.072048, 80.261962)
+Mar 04 17:31:00 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:00.142] 📍 Status: WP1/2 | Distance: 2.98m | Mode: AUTO | Armed: YES | Pos: (13.072048, 80.261962)
+Mar 04 17:31:00 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:00.344] 📍 Status: WP1/2 | Distance: 2.98m | Mode: AUTO | Armed: YES | Pos: (13.072048, 80.261962)
+Mar 04 17:31:00 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:00.545] 📍 Status: WP1/2 | Distance: 2.78m | Mode: AUTO | Armed: YES | Pos: (13.072050, 80.261961)
+Mar 04 17:31:00 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:00.746] 📍 Status: WP1/2 | Distance: 2.78m | Mode: AUTO | Armed: YES | Pos: (13.072050, 80.261961)
+Mar 04 17:31:00 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:00.949] 📍 Status: WP1/2 | Distance: 2.57m | Mode: AUTO | Armed: YES | Pos: (13.072051, 80.261960)
+Mar 04 17:31:01 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:01.150] 📍 Status: WP1/2 | Distance: 2.57m | Mode: AUTO | Armed: YES | Pos: (13.072051, 80.261960)
+Mar 04 17:31:01 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:01.351] 📍 Status: WP1/2 | Distance: 2.36m | Mode: AUTO | Armed: YES | Pos: (13.072053, 80.261959)
+Mar 04 17:31:01 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:01.554] 📍 Status: WP1/2 | Distance: 2.36m | Mode: AUTO | Armed: YES | Pos: (13.072053, 80.261959)
+Mar 04 17:31:01 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:01.755] 📍 Status: WP1/2 | Distance: 2.36m | Mode: AUTO | Armed: YES | Pos: (13.072053, 80.261959)
+Mar 04 17:31:01 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:01.957] 📍 Status: WP1/2 | Distance: 2.15m | Mode: AUTO | Armed: YES | Pos: (13.072054, 80.261957)
+Mar 04 17:31:02 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:02.157] 📍 Status: WP1/2 | Distance: 2.15m | Mode: AUTO | Armed: YES | Pos: (13.072054, 80.261957)
+Mar 04 17:31:02 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:02.358] 📍 Status: WP1/2 | Distance: 1.96m | Mode: AUTO | Armed: YES | Pos: (13.072056, 80.261956)
+Mar 04 17:31:02 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:02.559] 📍 Status: WP1/2 | Distance: 1.96m | Mode: AUTO | Armed: YES | Pos: (13.072056, 80.261956)
+Mar 04 17:31:02 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:02.761] 📍 Status: WP1/2 | Distance: 1.96m | Mode: AUTO | Armed: YES | Pos: (13.072056, 80.261956)
+Mar 04 17:31:02 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:02.880] 📊 Distance monitor: WP1 is 1.75m away (waiting for Pixhawk topic)
+Mar 04 17:31:02 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:02.964] 📍 Status: WP1/2 | Distance: 1.75m | Mode: AUTO | Armed: YES | Pos: (13.072057, 80.261955)
+Mar 04 17:31:03 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:03.165] 📍 Status: WP1/2 | Distance: 1.75m | Mode: AUTO | Armed: YES | Pos: (13.072057, 80.261955)
+Mar 04 17:31:03 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:03.368] 📍 Status: WP1/2 | Distance: 1.55m | Mode: AUTO | Armed: YES | Pos: (13.072059, 80.261954)
+Mar 04 17:31:03 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:03.570] 📍 Status: WP1/2 | Distance: 1.55m | Mode: AUTO | Armed: YES | Pos: (13.072059, 80.261954)
+Mar 04 17:31:03 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:03.774] 📍 Status: WP1/2 | Distance: 1.55m | Mode: AUTO | Armed: YES | Pos: (13.072059, 80.261954)
+Mar 04 17:31:03 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:03.976] 📍 Status: WP1/2 | Distance: 1.34m | Mode: AUTO | Armed: YES | Pos: (13.072060, 80.261953)
+Mar 04 17:31:04 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:04.177] 📍 Status: WP1/2 | Distance: 1.34m | Mode: AUTO | Armed: YES | Pos: (13.072060, 80.261953)
+Mar 04 17:31:04 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:04.379] 📍 Status: WP1/2 | Distance: 1.14m | Mode: AUTO | Armed: YES | Pos: (13.072062, 80.261951)
+Mar 04 17:31:04 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:04.580] 📍 Status: WP1/2 | Distance: 1.14m | Mode: AUTO | Armed: YES | Pos: (13.072062, 80.261951)
+Mar 04 17:31:04 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:04.781] 📍 Status: WP1/2 | Distance: 1.14m | Mode: AUTO | Armed: YES | Pos: (13.072062, 80.261951)
+Mar 04 17:31:04 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:04.981] 📍 Status: WP1/2 | Distance: 0.95m | Mode: AUTO | Armed: YES | Pos: (13.072063, 80.261950)
+Mar 04 17:31:05 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:05.182] 📍 Status: WP1/2 | Distance: 0.95m | Mode: AUTO | Armed: YES | Pos: (13.072063, 80.261950)
+Mar 04 17:31:05 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:05.383] 📍 Status: WP1/2 | Distance: 0.75m | Mode: AUTO | Armed: YES | Pos: (13.072065, 80.261949)
+Mar 04 17:31:05 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:05.584] 📍 Status: WP1/2 | Distance: 0.75m | Mode: AUTO | Armed: YES | Pos: (13.072065, 80.261949)
+Mar 04 17:31:05 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:05.786] 📍 Status: WP1/2 | Distance: 0.75m | Mode: AUTO | Armed: YES | Pos: (13.072065, 80.261949)
+Mar 04 17:31:05 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:05.987] 📍 Status: WP1/2 | Distance: 0.56m | Mode: AUTO | Armed: YES | Pos: (13.072067, 80.261948)
+Mar 04 17:31:06 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:06.189] 📍 Status: WP1/2 | Distance: 0.56m | Mode: AUTO | Armed: YES | Pos: (13.072067, 80.261948)
+Mar 04 17:31:06 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:06.390] 📍 Status: WP1/2 | Distance: 0.42m | Mode: AUTO | Armed: YES | Pos: (13.072068, 80.261947)
+Mar 04 17:31:06 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:06.592] 📍 Status: WP1/2 | Distance: 0.42m | Mode: AUTO | Armed: YES | Pos: (13.072068, 80.261947)
+Mar 04 17:31:06 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:06.793] 📍 Status: WP1/2 | Distance: 0.42m | Mode: AUTO | Armed: YES | Pos: (13.072068, 80.261947)
+Mar 04 17:31:06 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:06.994] 📍 Status: WP1/2 | Distance: 0.37m | Mode: AUTO | Armed: YES | Pos: (13.072068, 80.261947)
+Mar 04 17:31:07 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:07.195] 📍 Status: WP1/2 | Distance: 0.37m | Mode: AUTO | Armed: YES | Pos: (13.072068, 80.261947)
+Mar 04 17:31:07 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:07.396] 📍 Status: WP1/2 | Distance: 0.36m | Mode: AUTO | Armed: YES | Pos: (13.072069, 80.261947)
+Mar 04 17:31:07 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:07.596] 📍 Status: WP1/2 | Distance: 0.36m | Mode: AUTO | Armed: YES | Pos: (13.072069, 80.261947)
+Mar 04 17:31:07 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:07.797] 📍 Status: WP1/2 | Distance: 0.36m | Mode: AUTO | Armed: YES | Pos: (13.072069, 80.261947)
+Mar 04 17:31:07 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:07.998] 📍 Status: WP1/2 | Distance: 0.33m | Mode: AUTO | Armed: YES | Pos: (13.072069, 80.261947)
+Mar 04 17:31:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:08.105] 📊 Distance monitor: WP1 is 0.33m away (waiting for Pixhawk topic)
+Mar 04 17:31:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:08.200] 📍 Status: WP1/2 | Distance: 0.33m | Mode: AUTO | Armed: YES | Pos: (13.072069, 80.261947)
+Mar 04 17:31:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:08.401] 📍 Status: WP1/2 | Distance: 0.32m | Mode: AUTO | Armed: YES | Pos: (13.072069, 80.261947)
+Mar 04 17:31:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:08.603] 📍 Status: WP1/2 | Distance: 0.32m | Mode: AUTO | Armed: YES | Pos: (13.072069, 80.261947)
+Mar 04 17:31:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:08.810] 📍 Status: WP1/2 | Distance: 0.32m | Mode: AUTO | Armed: YES | Pos: (13.072069, 80.261947)
+Mar 04 17:31:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:09.011] 📍 Status: WP1/2 | Distance: 0.30m | Mode: AUTO | Armed: YES | Pos: (13.072069, 80.261947)
+Mar 04 17:31:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:09.211] 📍 Status: WP1/2 | Distance: 0.30m | Mode: AUTO | Armed: YES | Pos: (13.072069, 80.261947)
+Mar 04 17:31:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:09.414] 📍 Status: WP1/2 | Distance: 0.29m | Mode: AUTO | Armed: YES | Pos: (13.072069, 80.261947)
+Mar 04 17:31:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:09.615] 📍 Status: WP1/2 | Distance: 0.29m | Mode: AUTO | Armed: YES | Pos: (13.072069, 80.261947)
+Mar 04 17:31:09 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:09.816] 📍 Status: WP1/2 | Distance: 0.29m | Mode: AUTO | Armed: YES | Pos: (13.072069, 80.261947)
+Mar 04 17:31:10 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:10.017] 📍 Status: WP1/2 | Distance: 0.28m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261946)
+Mar 04 17:31:10 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:10.220] 📍 Status: WP1/2 | Distance: 0.28m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261946)
+Mar 04 17:31:10 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:10.421] 📍 Status: WP1/2 | Distance: 0.28m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261946)
+Mar 04 17:31:10 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:10.623] 📍 Status: WP1/2 | Distance: 0.28m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261946)
+Mar 04 17:31:10 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:10.826] 📍 Status: WP1/2 | Distance: 0.28m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261946)
+Mar 04 17:31:11 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:11.027] 📍 Status: WP1/2 | Distance: 0.27m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261946)
+Mar 04 17:31:11 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:11.228] 📍 Status: WP1/2 | Distance: 0.27m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261946)
+Mar 04 17:31:11 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:11.434] 📍 Status: WP1/2 | Distance: 0.25m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261946)
+Mar 04 17:31:11 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:11.639] 📍 Status: WP1/2 | Distance: 0.25m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261946)
+Mar 04 17:31:11 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:11.841] 📍 Status: WP1/2 | Distance: 0.25m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261946)
+Mar 04 17:31:12 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:12.043] 📍 Status: WP1/2 | Distance: 0.23m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261947)
+Mar 04 17:31:12 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:12.244] 📍 Status: WP1/2 | Distance: 0.23m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261947)
+Mar 04 17:31:12 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:12.276] ⚠️ FALLBACK: Entered threshold zone (0.23m) - waiting 30.0s for Pixhawk topic before fallback trigger
+Mar 04 17:31:12 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:12.446] 📍 Status: WP1/2 | Distance: 0.22m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261947)
+Mar 04 17:31:12 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:12.647] 📍 Status: WP1/2 | Distance: 0.22m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261947)
+Mar 04 17:31:12 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:12.850] 📍 Status: WP1/2 | Distance: 0.22m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261947)
+Mar 04 17:31:13 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:13.052] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261947)
+Mar 04 17:31:13 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:13.253] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261947)
+Mar 04 17:31:13 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:13.343] 📊 Distance monitor: WP1 is 0.21m away (waiting for Pixhawk topic)
+Mar 04 17:31:13 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:13.454] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261947)
+Mar 04 17:31:13 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:13.655] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261947)
+Mar 04 17:31:13 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:13.857] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261947)
+Mar 04 17:31:14 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:14.058] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261947)
+Mar 04 17:31:14 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:14.268] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261947)
+Mar 04 17:31:14 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:14.472] 📍 Status: WP1/2 | Distance: 0.20m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261947)
+Mar 04 17:31:14 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:14.673] 📍 Status: WP1/2 | Distance: 0.20m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261947)
+Mar 04 17:31:14 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:14.875] 📍 Status: WP1/2 | Distance: 0.20m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261947)
+Mar 04 17:31:15 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:15.080] 📍 Status: WP1/2 | Distance: 0.20m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261947)
+Mar 04 17:31:15 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:15.281] 📍 Status: WP1/2 | Distance: 0.20m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261947)
+Mar 04 17:31:15 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:15.483] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:15 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:15.685] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:15 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:15.886] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:16 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:16.087] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:16 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:16.287] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:16 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:16.489] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:16 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:16.690] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:16 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:16.891] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:17.092] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:17.293] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:17.461] 📡 RECEIVED /mavros/mission/reached: wp_seq=1
+Mar 04 17:31:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:17.465] 🎯 Multi-WP reached: seq=1, first=True, last=False
+Mar 04 17:31:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:17.469] 📡 RECEIVED /mavros/mission/reached: wp_seq=1
+Mar 04 17:31:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:17.475] 🟢 CONTINUOUS MODE: Servo ON at first waypoint (#1)
+Mar 04 17:31:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:17.493] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:17.694] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:17 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:17.895] 📍 Status: WP1/2 | Distance: 0.22m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:18 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:18.096] 📍 Status: WP1/2 | Distance: 0.22m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:18 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:18.297] 📍 Status: WP1/2 | Distance: 0.22m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:18 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:18.386] 📊 Distance monitor: WP1 is 0.22m away (waiting for Pixhawk topic)
+Mar 04 17:31:18 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:18.499] 📍 Status: WP1/2 | Distance: 0.22m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:18 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:18.701] 📍 Status: WP1/2 | Distance: 0.22m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:18 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:18.902] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:19 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:19.103] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:19 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:19.304] 📍 Status: WP1/2 | Distance: 0.21m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:19 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:19.505] 📍 Status: WP1/2 | Distance: 0.24m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:19 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:19.705] 📍 Status: WP1/2 | Distance: 0.24m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:19 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:19.907] 📍 Status: WP1/2 | Distance: 0.26m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:20 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:20.108] 📍 Status: WP1/2 | Distance: 0.26m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:20 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:20.309] 📍 Status: WP1/2 | Distance: 0.26m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261946)
+Mar 04 17:31:20 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:20.510] 📍 Status: WP1/2 | Distance: 0.34m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261945)
+Mar 04 17:31:20 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:20.711] 📍 Status: WP1/2 | Distance: 0.34m | Mode: AUTO | Armed: YES | Pos: (13.072071, 80.261945)
+Mar 04 17:31:20 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:20.912] 📍 Status: WP1/2 | Distance: 0.45m | Mode: AUTO | Armed: YES | Pos: (13.072072, 80.261944)
+Mar 04 17:31:21 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:21.113] 📍 Status: WP1/2 | Distance: 0.45m | Mode: AUTO | Armed: YES | Pos: (13.072072, 80.261944)
+Mar 04 17:31:21 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:21.314] 📍 Status: WP1/2 | Distance: 0.45m | Mode: AUTO | Armed: YES | Pos: (13.072072, 80.261944)
+Mar 04 17:31:21 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:21.517] 📍 Status: WP1/2 | Distance: 0.55m | Mode: AUTO | Armed: YES | Pos: (13.072074, 80.261944)
+Mar 04 17:31:21 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:21.718] 📍 Status: WP1/2 | Distance: 0.55m | Mode: AUTO | Armed: YES | Pos: (13.072074, 80.261944)
+Mar 04 17:31:21 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:21.918] 📍 Status: WP1/2 | Distance: 0.63m | Mode: AUTO | Armed: YES | Pos: (13.072075, 80.261944)
+Mar 04 17:31:22 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:22.119] 📍 Status: WP1/2 | Distance: 0.63m | Mode: AUTO | Armed: YES | Pos: (13.072075, 80.261944)
+Mar 04 17:31:22 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:22.320] 📍 Status: WP1/2 | Distance: 0.63m | Mode: AUTO | Armed: YES | Pos: (13.072075, 80.261944)
+Mar 04 17:31:22 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:22.520] 📍 Status: WP1/2 | Distance: 0.66m | Mode: AUTO | Armed: YES | Pos: (13.072076, 80.261944)
+Mar 04 17:31:22 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:22.721] 📍 Status: WP1/2 | Distance: 0.66m | Mode: AUTO | Armed: YES | Pos: (13.072076, 80.261944)
+Mar 04 17:31:22 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:22.922] 📍 Status: WP1/2 | Distance: 0.67m | Mode: AUTO | Armed: YES | Pos: (13.072076, 80.261944)
+Mar 04 17:31:23 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:23.123] 📍 Status: WP1/2 | Distance: 0.67m | Mode: AUTO | Armed: YES | Pos: (13.072076, 80.261944)
+Mar 04 17:31:23 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:23.324] 📍 Status: WP1/2 | Distance: 0.67m | Mode: AUTO | Armed: YES | Pos: (13.072076, 80.261944)
+Mar 04 17:31:23 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:23.525] 📍 Status: WP1/2 | Distance: 0.58m | Mode: AUTO | Armed: YES | Pos: (13.072076, 80.261945)
+Mar 04 17:31:23 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:23.618] 📊 Distance monitor: WP1 is 0.58m away (waiting for Pixhawk topic)
+Mar 04 17:31:23 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:23.726] 📍 Status: WP1/2 | Distance: 0.58m | Mode: AUTO | Armed: YES | Pos: (13.072076, 80.261945)
+Mar 04 17:31:23 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:23.928] 📍 Status: WP1/2 | Distance: 0.43m | Mode: AUTO | Armed: YES | Pos: (13.072075, 80.261946)
+Mar 04 17:31:24 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:24.131] 📍 Status: WP1/2 | Distance: 0.43m | Mode: AUTO | Armed: YES | Pos: (13.072075, 80.261946)
+Mar 04 17:31:24 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:24.332] 📍 Status: WP1/2 | Distance: 0.43m | Mode: AUTO | Armed: YES | Pos: (13.072075, 80.261946)
+Mar 04 17:31:24 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:24.533] 📍 Status: WP1/2 | Distance: 0.24m | Mode: AUTO | Armed: YES | Pos: (13.072073, 80.261947)
+Mar 04 17:31:24 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:24.734] 📍 Status: WP1/2 | Distance: 0.24m | Mode: AUTO | Armed: YES | Pos: (13.072073, 80.261947)
+Mar 04 17:31:24 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:24.844] ⚠️ FALLBACK: Entered threshold zone (0.24m) - waiting 30.0s for Pixhawk topic before fallback trigger
+Mar 04 17:31:24 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:24.935] 📍 Status: WP1/2 | Distance: 0.02m | Mode: AUTO | Armed: YES | Pos: (13.072072, 80.261948)
+Mar 04 17:31:25 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:25.136] 📍 Status: WP1/2 | Distance: 0.02m | Mode: AUTO | Armed: YES | Pos: (13.072072, 80.261948)
+Mar 04 17:31:25 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:25.337] 📍 Status: WP1/2 | Distance: 0.02m | Mode: AUTO | Armed: YES | Pos: (13.072072, 80.261948)
+Mar 04 17:31:25 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:25.537] 📍 Status: WP1/2 | Distance: 0.27m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261950)
+Mar 04 17:31:25 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:25.738] 📍 Status: WP1/2 | Distance: 0.27m | Mode: AUTO | Armed: YES | Pos: (13.072070, 80.261950)
+Mar 04 17:31:25 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:25.939] 📍 Status: WP1/2 | Distance: 0.48m | Mode: AUTO | Armed: YES | Pos: (13.072068, 80.261951)
+Mar 04 17:31:26 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:26.141] 📍 Status: WP1/2 | Distance: 0.48m | Mode: AUTO | Armed: YES | Pos: (13.072068, 80.261951)
+Mar 04 17:31:26 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:26.345] 📍 Status: WP1/2 | Distance: 0.48m | Mode: AUTO | Armed: YES | Pos: (13.072068, 80.261951)
+Mar 04 17:31:26 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:26.547] 📍 Status: WP1/2 | Distance: 0.70m | Mode: AUTO | Armed: YES | Pos: (13.072066, 80.261952)
+Mar 04 17:31:26 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:26.748] 📍 Status: WP1/2 | Distance: 0.70m | Mode: AUTO | Armed: YES | Pos: (13.072066, 80.261952)
+Mar 04 17:31:26 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:26.948] 📍 Status: WP1/2 | Distance: 0.90m | Mode: AUTO | Armed: YES | Pos: (13.072065, 80.261952)
+Mar 04 17:31:27 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:27.149] 📍 Status: WP1/2 | Distance: 0.90m | Mode: AUTO | Armed: YES | Pos: (13.072065, 80.261952)
+Mar 04 17:31:27 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:27.349] 📍 Status: WP1/2 | Distance: 0.90m | Mode: AUTO | Armed: YES | Pos: (13.072065, 80.261952)
+Mar 04 17:31:27 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:27.551] 📍 Status: WP1/2 | Distance: 1.11m | Mode: AUTO | Armed: YES | Pos: (13.072063, 80.261953)
+Mar 04 17:31:27 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:27.751] 📍 Status: WP1/2 | Distance: 1.11m | Mode: AUTO | Armed: YES | Pos: (13.072063, 80.261953)
+Mar 04 17:31:27 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:27.954] 📍 Status: WP1/2 | Distance: 1.29m | Mode: AUTO | Armed: YES | Pos: (13.072062, 80.261954)
+Mar 04 17:31:28 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:28.154] 📍 Status: WP1/2 | Distance: 1.29m | Mode: AUTO | Armed: YES | Pos: (13.072062, 80.261954)
+Mar 04 17:31:28 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:28.356] 📍 Status: WP1/2 | Distance: 1.47m | Mode: AUTO | Armed: YES | Pos: (13.072060, 80.261955)
+Mar 04 17:31:28 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:28.557] 📍 Status: WP1/2 | Distance: 1.47m | Mode: AUTO | Armed: YES | Pos: (13.072060, 80.261955)
+Mar 04 17:31:28 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:28.759] 📍 Status: WP1/2 | Distance: 1.47m | Mode: AUTO | Armed: YES | Pos: (13.072060, 80.261955)
+Mar 04 17:31:28 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:28.880] 📊 Distance monitor: WP1 is 1.67m away (waiting for Pixhawk topic)
+Mar 04 17:31:28 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:28.965] 📍 Status: WP1/2 | Distance: 1.67m | Mode: AUTO | Armed: YES | Pos: (13.072058, 80.261955)
+Mar 04 17:31:29 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:29.169] 📍 Status: WP1/2 | Distance: 1.67m | Mode: AUTO | Armed: YES | Pos: (13.072058, 80.261955)
+Mar 04 17:31:29 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:29.370] 📍 Status: WP1/2 | Distance: 1.87m | Mode: AUTO | Armed: YES | Pos: (13.072057, 80.261956)
+Mar 04 17:31:29 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:29.571] 📍 Status: WP1/2 | Distance: 1.87m | Mode: AUTO | Armed: YES | Pos: (13.072057, 80.261956)
+Mar 04 17:31:29 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:29.772] 📍 Status: WP1/2 | Distance: 1.87m | Mode: AUTO | Armed: YES | Pos: (13.072057, 80.261956)
+Mar 04 17:31:29 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:29.974] 📍 Status: WP1/2 | Distance: 2.08m | Mode: AUTO | Armed: YES | Pos: (13.072055, 80.261957)
+Mar 04 17:31:30 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:30.177] 📍 Status: WP1/2 | Distance: 2.08m | Mode: AUTO | Armed: YES | Pos: (13.072055, 80.261957)
+Mar 04 17:31:30 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:30.377] 📍 Status: WP1/2 | Distance: 2.28m | Mode: AUTO | Armed: YES | Pos: (13.072054, 80.261958)
+Mar 04 17:31:30 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:30.579] 📍 Status: WP1/2 | Distance: 2.28m | Mode: AUTO | Armed: YES | Pos: (13.072054, 80.261958)
+Mar 04 17:31:30 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:30.780] 📍 Status: WP1/2 | Distance: 2.28m | Mode: AUTO | Armed: YES | Pos: (13.072054, 80.261958)
+Mar 04 17:31:30 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:30.981] 📍 Status: WP1/2 | Distance: 2.47m | Mode: AUTO | Armed: YES | Pos: (13.072052, 80.261959)
+Mar 04 17:31:31 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:31.182] 📍 Status: WP1/2 | Distance: 2.47m | Mode: AUTO | Armed: YES | Pos: (13.072052, 80.261959)
+Mar 04 17:31:31 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:31.384] 📍 Status: WP1/2 | Distance: 2.58m | Mode: AUTO | Armed: YES | Pos: (13.072051, 80.261960)
+Mar 04 17:31:31 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:31.587] 📍 Status: WP1/2 | Distance: 2.58m | Mode: AUTO | Armed: YES | Pos: (13.072051, 80.261960)
+Mar 04 17:31:31 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:31.788] 📍 Status: WP1/2 | Distance: 2.58m | Mode: AUTO | Armed: YES | Pos: (13.072051, 80.261960)
+Mar 04 17:31:31 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:31.988] 📍 Status: WP1/2 | Distance: 2.63m | Mode: AUTO | Armed: YES | Pos: (13.072051, 80.261960)
+Mar 04 17:31:32 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:32.189] 📍 Status: WP1/2 | Distance: 2.63m | Mode: AUTO | Armed: YES | Pos: (13.072051, 80.261960)
+Mar 04 17:31:32 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:32.391] 📍 Status: WP1/2 | Distance: 2.66m | Mode: AUTO | Armed: YES | Pos: (13.072051, 80.261960)
+Mar 04 17:31:32 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:32.592] 📍 Status: WP1/2 | Distance: 2.66m | Mode: AUTO | Armed: YES | Pos: (13.072051, 80.261960)
+Mar 04 17:31:32 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:32.792] 📍 Status: WP1/2 | Distance: 2.66m | Mode: AUTO | Armed: YES | Pos: (13.072051, 80.261960)
+Mar 04 17:31:32 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:32.993] 📍 Status: WP1/2 | Distance: 2.70m | Mode: AUTO | Armed: YES | Pos: (13.072050, 80.261960)
+Mar 04 17:31:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:33.194] 📍 Status: WP1/2 | Distance: 2.70m | Mode: AUTO | Armed: YES | Pos: (13.072050, 80.261960)
+Mar 04 17:31:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:33.396] 📍 Status: WP1/2 | Distance: 2.75m | Mode: AUTO | Armed: YES | Pos: (13.072050, 80.261961)
+Mar 04 17:31:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:33.597] 📍 Status: WP1/2 | Distance: 2.75m | Mode: AUTO | Armed: YES | Pos: (13.072050, 80.261961)
+Mar 04 17:31:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:33.798] 📍 Status: WP1/2 | Distance: 2.75m | Mode: AUTO | Armed: YES | Pos: (13.072050, 80.261961)
+Mar 04 17:31:33 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:33.999] 📍 Status: WP1/2 | Distance: 2.79m | Mode: AUTO | Armed: YES | Pos: (13.072050, 80.261961)
+Mar 04 17:31:34 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:34.117] 📊 Distance monitor: WP1 is 2.79m away (waiting for Pixhawk topic)
+Mar 04 17:31:34 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:34.200] 📍 Status: WP1/2 | Distance: 2.79m | Mode: AUTO | Armed: YES | Pos: (13.072050, 80.261961)
+Mar 04 17:31:34 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:34.401] 📍 Status: WP1/2 | Distance: 2.83m | Mode: AUTO | Armed: YES | Pos: (13.072050, 80.261961)
+Mar 04 17:31:34 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:34.603] 📍 Status: WP1/2 | Distance: 2.83m | Mode: AUTO | Armed: YES | Pos: (13.072050, 80.261961)
+Mar 04 17:31:34 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:34.808] 📍 Status: WP1/2 | Distance: 2.83m | Mode: AUTO | Armed: YES | Pos: (13.072050, 80.261961)
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.009] 📍 Status: WP1/2 | Distance: 2.85m | Mode: AUTO | Armed: YES | Pos: (13.072050, 80.261961)
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.210] 📍 Status: WP1/2 | Distance: 2.85m | Mode: AUTO | Armed: YES | Pos: (13.072050, 80.261961)
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.412] 📍 Status: WP1/2 | Distance: 2.86m | Mode: AUTO | Armed: YES | Pos: (13.072049, 80.261962)
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.614] 📍 Status: WP1/2 | Distance: 2.86m | Mode: AUTO | Armed: YES | Pos: (13.072049, 80.261962)
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.817] 📍 Status: WP1/2 | Distance: 2.86m | Mode: AUTO | Armed: YES | Pos: (13.072049, 80.261962)
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.823] 📡 RECEIVED /mavros/mission/reached: wp_seq=2
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.826] 🎯 Multi-WP reached: seq=2, first=False, last=True
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.828] 📡 RECEIVED /mavros/mission/reached: wp_seq=2
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.830] 🔴 CONTINUOUS MODE: Servo OFF at last waypoint (#2)
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.922] 🛑 Stopped RTK monitoring
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.922] ⏹ Stopped periodic status logging
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.922] ═══════════════════════════════════════════════════
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.922] 🎉 MISSION COMPLETED SUCCESSFULLY
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.922] Duration: 138.2 seconds (2.3 minutes)
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.922] Waypoints completed: 2
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.922] ═══════════════════════════════════════════════════
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.926] 🛑 Setting final HOLD mode
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.926] 🔄 MODE CHANGE: AUTO → HOLD
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.938] ✅ PIXHAWK MODE CHANGED TO: HOLD
+Mar 04 17:31:35 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:35.938] 📝 Transitioning state: COMPLETED → READY (mission can be restarted)
+Mar 04 17:31:58 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:31:58.832] MISSION MODE CHANGED: continuous → dash
+Mar 04 17:32:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:32:08.524] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Mar 04 17:32:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:32:08.524] 📥 COMMAND RECEIVED: START
+Mar 04 17:32:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:32:08.524] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Mar 04 17:32:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:32:08.525] 🎬 START command received
+Mar 04 17:32:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:32:08.525] Current state: ready
+Mar 04 17:32:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:32:08.525] Waypoints loaded: 2
+Mar 04 17:32:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:32:08.525] ⚡ Verifying vehicle armed state before mission start...
+Mar 04 17:32:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:32:08.526] ✓ Pixhawk already armed
+Mar 04 17:32:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:32:08.526] ✅ Vehicle armed — proceeding with mission start
+Mar 04 17:32:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:32:08.526] [GPS_FAILSAFE] Mission started (failsafe DISABLED)
+Mar 04 17:32:08 ubuntu nrp-service[3104]: [MISSION_CONTROLLER] [2026-03-04 17:32:08.527] ═════════════�

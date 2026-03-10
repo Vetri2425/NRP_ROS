@@ -1,0 +1,696 @@
+asyncapi: 2.6.0
+info:
+  title: NRP Rover Socket.IO API
+  version: 1.0.0
+  description: |
+    Real-time event API for the NRP Rover Backend.
+    Uses Socket.IO over WebSocket/polling on port 5001.
+
+    **Client→Server** events are listed under `subscribe` (the client subscribes to send them).
+    **Server→Client** events are listed under `publish` (the server publishes them to the client).
+
+servers:
+  production:
+    url: localhost:5001
+    protocol: wss
+    description: NRP Rover Backend (Socket.IO over ASGI/uvicorn)
+
+channels:
+  # ──────────────────────────────────────────────
+  #  CONNECTION
+  # ──────────────────────────────────────────────
+  connect:
+    description: Client connects. Server responds with `connection_response` and `connection_status`.
+    subscribe:
+      operationId: onConnect
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  disconnect:
+    description: Client disconnects. Server cleans up manual control and client state.
+    subscribe:
+      operationId: onDisconnect
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  ping:
+    description: Latency check. Server replies with `pong` including RTT metrics and connection quality.
+    subscribe:
+      operationId: onPing
+      message:
+        payload:
+          type: object
+          properties:
+            client_timestamp:
+              type: number
+              description: Unix timestamp (ms) for RTT calculation
+
+  request_rover_reconnect:
+    description: Force the backend to drop and re-establish the MAVROS vehicle link.
+    subscribe:
+      operationId: onRequestRoverReconnect
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  connection_response:
+    description: Sent to the connecting client to confirm the session.
+    publish:
+      operationId: sendConnectionResponse
+      message:
+        payload:
+          type: object
+          properties:
+            status:
+              type: string
+              enum: [connected]
+            sid:
+              type: string
+            timestamp:
+              type: number
+
+  connection_status:
+    description: Broadcast when rover connection state changes.
+    publish:
+      operationId: sendConnectionStatus
+      message:
+        payload:
+          type: object
+          properties:
+            status:
+              type: string
+              enum: [CONNECTED_TO_ROVER, WAITING_FOR_ROVER]
+            message:
+              type: string
+
+  pong:
+    description: Response to `ping` with RTT and connection quality metrics.
+    publish:
+      operationId: sendPong
+      message:
+        payload:
+          type: object
+          properties:
+            timestamp:
+              type: number
+            server_time:
+              type: number
+            session_id:
+              type: string
+            ping_count:
+              type: integer
+            connection_quality:
+              type: string
+              enum: [excellent, good, fair, poor]
+            client_timestamp:
+              type: number
+
+  rover_reconnect_ack:
+    description: Acknowledges a reconnect request.
+    publish:
+      operationId: sendRoverReconnectAck
+      message:
+        payload:
+          type: object
+          properties:
+            status:
+              type: string
+            message:
+              type: string
+
+  server_health:
+    description: Periodic server health broadcast (~5s intervals).
+    publish:
+      operationId: sendServerHealth
+      message:
+        payload:
+          type: object
+          properties:
+            timestamp:
+              type: number
+            summary:
+              type: object
+
+  connection_warning:
+    description: Warning about connection degradation.
+    publish:
+      operationId: sendConnectionWarning
+      message:
+        payload:
+          type: object
+          properties:
+            message:
+              type: string
+
+  # ──────────────────────────────────────────────
+  #  ROVER DATA
+  # ──────────────────────────────────────────────
+  rover_data:
+    description: Live telemetry broadcast (throttled ~1Hz and realtime ~20Hz).
+    publish:
+      operationId: sendRoverData
+      message:
+        payload:
+          type: object
+          properties:
+            position:
+              type: object
+              properties:
+                lat: { type: number }
+                lng: { type: number }
+            heading: { type: number }
+            battery: { type: number }
+            voltage: { type: number }
+            current: { type: number }
+            status: { type: string }
+            mode: { type: string }
+            rtk_status: { type: string }
+            satellites_visible: { type: integer }
+            groundspeed: { type: number }
+            temperature: { type: number }
+            servo_output: { type: object }
+            imu: { type: object }
+            rtk_fix_type: { type: integer }
+            rtk_base_linked: { type: boolean }
+            rtk_baseline_age: { type: number }
+            gps_failsafe_mode: { type: string }
+            gps_failsafe_triggered: { type: string }
+            obstacle_detection_enabled: { type: boolean }
+            manual_control: { type: object }
+            network: { type: object }
+
+  server_activity:
+    description: Activity log stream for monitoring.
+    publish:
+      operationId: sendServerActivity
+      message:
+        payload:
+          type: object
+          properties:
+            timestamp: { type: string }
+            type: { type: string }
+            message: { type: string }
+
+  server_log:
+    description: Server-side log entries.
+    publish:
+      operationId: sendServerLog
+      message:
+        payload:
+          type: object
+          properties:
+            message: { type: string }
+            level: { type: string, enum: [INFO, WARNING, ERROR, SUCCESS, DEBUG] }
+
+  # ──────────────────────────────────────────────
+  #  MISSION
+  # ──────────────────────────────────────────────
+  request_mission_logs:
+    description: Request snapshot of mission log history. Server emits `mission_logs_snapshot`.
+    subscribe:
+      operationId: onRequestMissionLogs
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  mission_upload:
+    description: "[DEPRECATED] Upload mission waypoints via Socket.IO. Use REST `/api/mission/upload` instead."
+    subscribe:
+      operationId: onMissionUpload
+      message:
+        payload:
+          type: object
+          properties:
+            waypoints:
+              type: array
+              items:
+                type: object
+                properties:
+                  lat: { type: number }
+                  lng: { type: number }
+                  alt: { type: number }
+
+  subscribe_mission_status:
+    description: Subscribe to mission status updates. Returns history and current status.
+    subscribe:
+      operationId: onSubscribeMissionStatus
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  get_mission_status:
+    description: One-shot request for current mission status.
+    subscribe:
+      operationId: onGetMissionStatus
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  send_command:
+    description: Send an ArduPilot command (arm, disarm, set_mode, mission_start, etc.).
+    subscribe:
+      operationId: onSendCommand
+      message:
+        payload:
+          type: object
+          required: [command]
+          properties:
+            command:
+              type: string
+              enum: [arm, disarm, set_mode, reboot, mission_start, mission_stop, mission_pause, mission_resume]
+            mode:
+              type: string
+              description: Required when command is set_mode (e.g. MANUAL, HOLD, AUTO, GUIDED)
+
+  inject_mavros_telemetry:
+    description: "[DEV ONLY] Inject fake MAVROS telemetry for testing."
+    subscribe:
+      operationId: onInjectMavrosTelemetry
+      message:
+        payload:
+          type: object
+          properties:
+            state:
+              type: object
+              properties:
+                armed: { type: boolean }
+                mode: { type: string }
+
+  mission_logs_snapshot:
+    description: Full mission log history.
+    publish:
+      operationId: sendMissionLogsSnapshot
+      message:
+        payload:
+          type: array
+          items:
+            type: object
+
+  mission_upload_progress:
+    description: Progress indicator during mission upload (0-100%).
+    publish:
+      operationId: sendMissionUploadProgress
+      message:
+        payload:
+          type: object
+          properties:
+            progress: { type: integer, minimum: 0, maximum: 100 }
+
+  mission_uploaded:
+    description: Completion status after mission upload.
+    publish:
+      operationId: sendMissionUploaded
+      message:
+        payload:
+          type: object
+          properties:
+            ok: { type: boolean }
+            count: { type: integer }
+            message: { type: string }
+            error: { type: string }
+
+  mission_status:
+    description: Broadcast mission status update.
+    publish:
+      operationId: sendMissionStatus
+      message:
+        payload:
+          type: object
+          properties:
+            mission_state: { type: string }
+            mission_mode: { type: string }
+            current_waypoint: { type: integer }
+            total_waypoints: { type: integer }
+            current_position: { type: object }
+            pixhawk_state: { type: object }
+
+  mission_status_history:
+    description: Cached mission status history on subscription.
+    publish:
+      operationId: sendMissionStatusHistory
+      message:
+        payload:
+          type: object
+          properties:
+            success: { type: boolean }
+            history: { type: array, items: { type: object } }
+
+  mission_status_response:
+    description: Response to `get_mission_status` request.
+    publish:
+      operationId: sendMissionStatusResponse
+      message:
+        payload:
+          type: object
+          properties:
+            success: { type: boolean }
+            status: { type: object }
+            error: { type: string }
+
+  mission_event:
+    description: Mission lifecycle events (start, stop, waypoint reached, etc.).
+    publish:
+      operationId: sendMissionEvent
+      message:
+        payload:
+          type: object
+
+  command_response:
+    description: Response to `send_command`.
+    publish:
+      operationId: sendCommandResponse
+      message:
+        payload:
+          type: object
+          properties:
+            status: { type: string, enum: [success, error] }
+            message: { type: string }
+            command: { type: string }
+            acked: { type: boolean }
+
+  inject_ack:
+    description: Acknowledgment for telemetry injection.
+    publish:
+      operationId: sendInjectAck
+      message:
+        payload:
+          type: object
+          properties:
+            status: { type: string, enum: [ok, error] }
+            error: { type: string }
+
+  # ──────────────────────────────────────────────
+  #  RTK — NTRIP CASTER
+  # ──────────────────────────────────────────────
+  connect_caster:
+    description: Start RTK corrections stream from NTRIP caster. Stops existing stream first.
+    subscribe:
+      operationId: onConnectCaster
+      message:
+        payload:
+          type: object
+          required: [host, port, mountpoint, user, password]
+          properties:
+            host: { type: string }
+            port: { type: integer, default: 2101 }
+            mountpoint: { type: string }
+            user: { type: string }
+            password: { type: string }
+
+  disconnect_caster:
+    description: Stop the RTK NTRIP stream.
+    subscribe:
+      operationId: onDisconnectCaster
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  rtk_log:
+    description: Real-time RTK connection status messages.
+    publish:
+      operationId: sendRtkLog
+      message:
+        payload:
+          type: object
+          properties:
+            message: { type: string }
+
+  caster_status:
+    description: NTRIP caster stream status.
+    publish:
+      operationId: sendCasterStatus
+      message:
+        payload:
+          type: object
+          properties:
+            status: { type: string, enum: [Connecting, Connected, Disconnected, error] }
+            message: { type: string }
+
+  rtk_forwarded:
+    description: RTCM data forwarded to vehicle.
+    publish:
+      operationId: sendRtkForwarded
+      message:
+        payload:
+          type: object
+          properties:
+            bytes_received: { type: integer }
+            message: { type: string }
+
+  rtk_debug:
+    description: Debug info for RTK operations.
+    publish:
+      operationId: sendRtkDebug
+      message:
+        payload:
+          type: object
+          properties:
+            event: { type: string }
+            sender_id: { type: string }
+            data: { type: object }
+
+  # ──────────────────────────────────────────────
+  #  RTK — LORA USB RECEIVER
+  # ──────────────────────────────────────────────
+  start_lora_rtk_stream:
+    description: Start receiving RTK corrections via LoRa USB receiver. Prevents simultaneous NTRIP + LoRa.
+    subscribe:
+      operationId: onStartLoraRtkStream
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  stop_lora_rtk_stream:
+    description: Stop LoRa RTK corrections stream.
+    subscribe:
+      operationId: onStopLoraRtkStream
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  get_lora_rtk_status:
+    description: Get current LoRa RTK handler connection/streaming status.
+    subscribe:
+      operationId: onGetLoraRtkStatus
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  lora_rtk_status:
+    description: LoRa RTK receiver status updates.
+    publish:
+      operationId: sendLoraRtkStatus
+      message:
+        payload:
+          type: object
+          properties:
+            status: { type: string, enum: [connecting, streaming, error, disconnected, unavailable] }
+            message: { type: string }
+            is_connected: { type: boolean }
+            started_at: { type: string }
+
+  # ──────────────────────────────────────────────
+  #  MANUAL CONTROL
+  # ──────────────────────────────────────────────
+  manual_control:
+    description: Real-time joystick values for manual rover driving.
+    subscribe:
+      operationId: onManualControl
+      message:
+        payload:
+          type: object
+          properties:
+            left:
+              type: number
+              minimum: -1
+              maximum: 1
+              description: Left joystick (throttle)
+            right:
+              type: number
+              minimum: -1
+              maximum: 1
+              description: Right joystick (steering)
+
+  emergency_stop:
+    description: Emergency stop — immediately halt motors and switch to HOLD mode.
+    subscribe:
+      operationId: onEmergencyStop
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  stop_manual_control:
+    description: Gracefully stop manual control session.
+    subscribe:
+      operationId: onStopManualControl
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  manual_control_error:
+    description: Error during manual control.
+    publish:
+      operationId: sendManualControlError
+      message:
+        payload:
+          type: object
+          properties:
+            status: { type: string }
+            message: { type: string }
+            acked: { type: boolean }
+
+  manual_control_stopped:
+    description: Broadcast when manual control stops.
+    publish:
+      operationId: sendManualControlStopped
+      message:
+        payload:
+          type: object
+          properties:
+            reason: { type: string }
+            timestamp: { type: number }
+
+  # ──────────────────────────────────────────────
+  #  GPS FAILSAFE & OBSTACLE DETECTION
+  # ──────────────────────────────────────────────
+  set_gps_failsafe_mode:
+    description: "Set GPS failsafe mode: disable, strict, or relax."
+    subscribe:
+      operationId: onSetGpsFailsafeMode
+      message:
+        payload:
+          type: object
+          required: [mode]
+          properties:
+            mode:
+              type: string
+              enum: [disable, strict, relax]
+
+  set_obstacle_detection:
+    description: Enable/disable ultrasonic obstacle detection pause logic.
+    subscribe:
+      operationId: onSetObstacleDetection
+      message:
+        payload:
+          type: object
+          required: [enabled]
+          properties:
+            enabled:
+              type: boolean
+
+  failsafe_acknowledge:
+    description: Acknowledge GPS failsafe trigger (strict mode). Starts stable window timer.
+    subscribe:
+      operationId: onFailsafeAcknowledge
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  failsafe_resume_mission:
+    description: Resume mission after GPS failsafe (strict mode — after stable window).
+    subscribe:
+      operationId: onFailsafeResumeMission
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  failsafe_restart_mission:
+    description: Restart mission from beginning (strict mode option).
+    subscribe:
+      operationId: onFailsafeRestartMission
+      message:
+        payload:
+          type: object
+          properties: {}
+
+  failsafe_mode_changed:
+    description: Confirmation that failsafe mode changed.
+    publish:
+      operationId: sendFailsafeModeChanged
+      message:
+        payload:
+          type: object
+          properties:
+            mode: { type: string, enum: [disable, strict, relax] }
+            timestamp: { type: number }
+            message: { type: string }
+
+  failsafe_acknowledged:
+    description: Failsafe trigger acknowledged by user.
+    publish:
+      operationId: sendFailsafeAcknowledged
+      message:
+        payload:
+          type: object
+          properties:
+            timestamp: { type: number }
+            message: { type: string }
+
+  failsafe_resumed:
+    description: Mission resumed after GPS failsafe.
+    publish:
+      operationId: sendFailsafeResumed
+      message:
+        payload:
+          type: object
+          properties:
+            timestamp: { type: number }
+            message: { type: string }
+
+  failsafe_restarted:
+    description: Mission restarted from beginning.
+    publish:
+      operationId: sendFailsafeRestarted
+      message:
+        payload:
+          type: object
+          properties:
+            timestamp: { type: number }
+            message: { type: string }
+
+  failsafe_error:
+    description: Error during failsafe operation.
+    publish:
+      operationId: sendFailsafeError
+      message:
+        payload:
+          type: object
+          properties:
+            message: { type: string }
+
+  obstacle_detection_changed:
+    description: Confirmation that obstacle detection toggle changed.
+    publish:
+      operationId: sendObstacleDetectionChanged
+      message:
+        payload:
+          type: object
+          properties:
+            enabled: { type: boolean }
+            timestamp: { type: number }
+
+  obstacle_error:
+    description: Error during obstacle detection operation.
+    publish:
+      operationId: sendObstacleError
+      message:
+        payload:
+          type: object
+          properties:
+            message: { type: string }

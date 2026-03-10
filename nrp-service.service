@@ -1,0 +1,59 @@
+[Unit]
+Description=NRP ROS Service - Navigation and Robotics Platform
+Documentation=https://github.com/Vetri2425/NRP_ROS_V2
+After=network.target network-online.target
+Wants=network-online.target
+Requires=network.target
+
+[Service]
+Type=exec
+User=flash
+Group=flash
+WorkingDirectory=/home/flash/NRP_ROS
+ExecStart=/home/flash/NRP_ROS/start_service.sh
+ExecStop=/bin/kill -TERM $MAINPID
+ExecReload=/bin/kill -HUP $MAINPID
+
+# Restart policy
+Restart=on-failure
+RestartSec=10
+StartLimitInterval=60
+StartLimitBurst=3
+
+# Security settings
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/flash/NRP_ROS /tmp /var/tmp /home/flash/.ros
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+MemoryMax=4G
+CPUQuota=300%
+
+# Environment
+Environment=PYTHONPATH=/home/flash/NRP_ROS
+Environment=ROS_DOMAIN_ID=0
+Environment=ROS_LOCALHOST_ONLY=0
+Environment=AMENT_TRACE_SETUP_FILES=
+Environment=HOME=/home/flash
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=nrp-service
+
+# Process management
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStartSec=120
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

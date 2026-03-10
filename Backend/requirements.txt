@@ -1,0 +1,15 @@
+# FastAPI and ASGI Server
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+
+# SocketIO (async mode for ASGI)
+python-socketio==5.10.0
+python-engineio==4.8.0
+
+# Templates and static files
+jinja2==3.1.2
+aiofiles==23.2.1
+
+# MAVLink Communication
+pymavlink==2.4.39
+googletrans==4.0.0-rc1

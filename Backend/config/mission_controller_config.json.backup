@@ -1,0 +1,24 @@
+{
+  "mission_controller": {
+    "sprayer_parameters": {
+      "servo_channel": 11,
+      "servo_pwm_start": 1900,
+      "servo_pwm_stop": 1100,
+      "spray_duration": 4.0,
+      "delay_before_spray": 0.6,
+      "delay_after_spray": 1.8,
+      "gps_timeout": 30.0,
+      "auto_mode": true
+    },
+    "mission_parameters": {
+      "waypoint_reach_threshold": 2.0
+    },
+    "safety_parameters": {
+      "max_speed": 5.0
+    }
+  },
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2026-02-25 11:36:00"
+  }
+}

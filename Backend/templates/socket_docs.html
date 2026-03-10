@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NRP Socket.IO — Interactive Docs</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<style>
+* { box-sizing: border-box; }
+body { font-family: Arial, Helvetica, sans-serif; margin: 0; background: #0f172a; color: #e2e8f0; }
+
+/* Header */
+.header {
+  background: #111827; padding: 0.8rem 1.5rem; display: flex; align-items: center;
+  gap: 1rem; border-bottom: 1px solid #1f2937; flex-wrap: wrap;
+}
+.header h1 { font-size: 1.2rem; margin: 0; white-space: nowrap; }
+.badge {
+  display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem;
+  font-weight: bold; text-transform: uppercase;
+}
+.badge-off { background: #7f1d1d; color: #f87171; }
+.badge-on  { background: #166534; color: #22c55e; }
+.header input[type=text] {
+  background: #0f172a; border: 1px solid #1f2937; color: #e2e8f0;
+  padding: 0.35rem 0.6rem; border-radius: 4px; width: 220px; font-size: 0.85rem;
+}
+.btn {
+  border: none; border-radius: 4px; padding: 0.4rem 1rem; cursor: pointer;
+  font-weight: 600; font-size: 0.8rem;
+}
+.btn-green { background: #22c55e; color: #000; }
+.btn-green:hover { background: #4ade80; }
+.btn-red   { background: #ef4444; color: #fff; }
+.btn-red:hover { background: #f87171; }
+.btn-blue  { background: #3b82f6; color: #fff; }
+.btn-blue:hover { background: #60a5fa; }
+.btn-sm    { padding: 0.25rem 0.6rem; font-size: 0.75rem; }
+
+/* Layout */
+.main { display: flex; height: calc(100vh - 52px); }
+.left  { flex: 0 0 60%; overflow-y: auto; padding: 1rem; border-right: 1px solid #1f2937; }
+.right { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* Category accordion */
+.cat { margin-bottom: 0.8rem; border: 1px solid #1f2937; border-radius: 6px; overflow: hidden; }
+.cat-head {
+  background: #111827; padding: 0.6rem 1rem; cursor: pointer; font-weight: bold;
+  font-size: 0.95rem; display: flex; justify-content: space-between; align-items: center;
+  user-select: none;
+}
+.cat-head:hover { background: #1e293b; }
+.cat-head .arrow { transition: transform 0.2s; }
+.cat.open .cat-head .arrow { transform: rotate(90deg); }
+.cat-body { display: none; }
+.cat.open .cat-body { display: block; }
+
+/* Event card */
+.ev-card {
+  padding: 0.7rem 1rem; border-top: 1px solid #1f2937;
+}
+.ev-name { font-family: monospace; color: #60a5fa; font-size: 0.9rem; font-weight: bold; }
+.ev-desc { font-size: 0.78rem; color: #94a3b8; margin: 0.25rem 0 0.4rem; }
+.ev-card textarea {
+  width: 100%; min-height: 50px; background: #0f172a; border: 1px solid #1f2937;
+  color: #e2e8f0; font-family: monospace; font-size: 0.8rem; padding: 0.4rem;
+  border-radius: 4px; resize: vertical;
+}
+.ev-actions { margin-top: 0.35rem; display: flex; gap: 0.5rem; align-items: center; }
+.ev-actions .status { font-size: 0.75rem; color: #94a3b8; }
+
+/* Event log (right panel) */
+.log-header {
+  background: #111827; padding: 0.6rem 1rem; display: flex; justify-content: space-between;
+  align-items: center; border-bottom: 1px solid #1f2937;
+}
+.log-header h2 { margin: 0; font-size: 1rem; }
+.log-opts { display: flex; gap: 0.8rem; align-items: center; font-size: 0.8rem; }
+.log-opts label { display: flex; align-items: center; gap: 0.3rem; color: #94a3b8; cursor: pointer; }
+#event-log {
+  flex: 1; overflow-y: auto; padding: 0.5rem; font-family: monospace; font-size: 0.75rem;
+}
+.log-entry { padding: 0.3rem 0.5rem; border-bottom: 1px solid #1e293b; word-break: break-all; }
+.log-entry .ts  { color: #64748b; }
+.log-entry .ev  { color: #60a5fa; font-weight: bold; margin-left: 0.3rem; }
+.log-entry pre  { margin: 0.15rem 0 0; color: #94a3b8; white-space: pre-wrap; max-height: 120px; overflow: hidden; }
+.log-sent .ev { color: #22c55e; }
+.log-error .ev { color: #f87171; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Socket.IO Interactive Docs</h1>
+  <span id="badge" class="badge badge-off">disconnected</span>
+  <input id="server-url" type="text" placeholder="Server URL">
+  <button class="btn btn-green" onclick="doConnect()">Connect</button>
+  <button class="btn btn-red" onclick="doDisconnect()">Disconnect</button>
+  <a href="/asyncapi" class="btn btn-blue btn-sm" style="text-decoration:none;">AsyncAPI Docs</a>
+  <a href="/docs" class="btn btn-blue btn-sm" style="text-decoration:none;">REST Swagger</a>
+</div>
+
+<div class="main">
+  <div class="left" id="events-panel"></div>
+  <div class="right">
+    <div class="log-header">
+      <h2>Events Received</h2>
+      <div class="log-opts">
+        <label><input type="checkbox" id="chk-rover-data"> rover_data</label>
+        <label><input type="checkbox" id="chk-server-log"> server_log</label>
+        <button class="btn btn-sm btn-red" onclick="clearLog()">Clear</button>
+      </div>
+    </div>
+    <div id="event-log"></div>
+  </div>
+</div>
+
+<script>
+// ── Event definitions ──
+var EVENTS = [
+  { cat: "Connection", events: [
+    { name: "ping", desc: "Latency check. Server replies with pong.", payload: '{"client_timestamp": 0}' },
+    { name: "request_rover_reconnect", desc: "Force MAVROS reconnect.", payload: '{}' }
+  ]},
+  { cat: "Mission", events: [
+    { name: "send_command", desc: "Send ArduPilot command (arm, disarm, set_mode, etc.).", payload: '{"command": "arm"}' },
+    { name: "subscribe_mission_status", desc: "Subscribe to mission status updates.", payload: '{}' },
+    { name: "get_mission_status", desc: "One-shot mission status request.", payload: '{}' },
+    { name: "request_mission_logs", desc: "Request mission log history snapshot.", payload: '{}' },
+    { name: "mission_upload", desc: "[DEPRECATED] Upload waypoints. Use REST API.", payload: '{"waypoints": []}' },
+    { name: "inject_mavros_telemetry", desc: "[DEV] Inject fake telemetry for testing.", payload: '{"state": {"armed": false, "mode": "MANUAL"}}' }
+  ]},
+  { cat: "RTK — NTRIP Caster", events: [
+    { name: "connect_caster", desc: "Start NTRIP RTK corrections stream.", payload: '{"host": "", "port": 2101, "mountpoint": "", "user": "", "password": ""}' },
+    { name: "disconnect_caster", desc: "Stop NTRIP stream.", payload: '{}' }
+  ]},
+  { cat: "RTK — LoRa USB", events: [
+    { name: "start_lora_rtk_stream", desc: "Start LoRa RTK corrections.", payload: '{}' },
+    { name: "stop_lora_rtk_stream", desc: "Stop LoRa RTK corrections.", payload: '{}' },
+    { name: "get_lora_rtk_status", desc: "Get LoRa RTK status.", payload: '{}' }
+  ]},
+  { cat: "Manual Control", events: [
+    { name: "manual_control", desc: "Send joystick values (-1 to 1).", payload: '{"left": 0, "right": 0}' },
+    { name: "emergency_stop", desc: "Emergency stop — halt motors, switch to HOLD.", payload: '{}' },
+    { name: "stop_manual_control", desc: "Gracefully stop manual control session.", payload: '{}' }
+  ]},
+  { cat: "GPS Failsafe & Obstacle Detection", events: [
+    { name: "set_gps_failsafe_mode", desc: "Set failsafe mode: disable, strict, relax.", payload: '{"mode": "disable"}' },
+    { name: "set_obstacle_detection", desc: "Enable/disable ultrasonic obstacle detection.", payload: '{"enabled": false}' },
+    { name: "failsafe_acknowledge", desc: "Acknowledge GPS failsafe trigger (strict mode).", payload: '{}' },
+    { name: "failsafe_resume_mission", desc: "Resume mission after failsafe.", payload: '{}' },
+    { name: "failsafe_restart_mission", desc: "Restart mission from beginning.", payload: '{}' }
+  ]}
+];
+
+// Server→client events to listen on
+var SERVER_EVENTS = [
+  "connection_response", "connection_status", "pong", "rover_reconnect_ack",
+  "server_health", "connection_warning", "rover_data", "server_activity", "server_log",
+  "mission_logs_snapshot", "mission_upload_progress", "mission_uploaded",
+  "mission_status", "mission_status_history", "mission_status_response",
+  "mission_status_subscribed", "mission_event", "command_response", "inject_ack",
+  "rtk_log", "caster_status", "rtk_forwarded", "rtk_debug",
+  "lora_rtk_status", "manual_control_error", "manual_control_stopped",
+  "failsafe_mode_changed", "failsafe_acknowledged", "failsafe_resumed",
+  "failsafe_restarted", "failsafe_error", "obstacle_detection_changed", "obstacle_error",
+  "mission_download_progress"
+];
+
+var socket = null;
+var logDiv = document.getElementById('event-log');
+var badge  = document.getElementById('badge');
+var urlInput = document.getElementById('server-url');
+
+// Default server URL
+urlInput.value = location.protocol + '//' + (location.hostname || 'localhost') + ':5001';
+
+// ── Build UI ──
+(function buildUI() {
+  var panel = document.getElementById('events-panel');
+  EVENTS.forEach(function(cat, ci) {
+    var div = document.createElement('div');
+    div.className = 'cat open';
+    var html = '<div class="cat-head" onclick="this.parentElement.classList.toggle(\'open\')">' +
+      '<span>' + cat.cat + ' (' + cat.events.length + ')</span><span class="arrow">&#9654;</span></div>';
+    html += '<div class="cat-body">';
+    cat.events.forEach(function(ev) {
+      var id = 'ta-' + ev.name.replace(/[^a-z0-9]/gi, '_');
+      html += '<div class="ev-card">' +
+        '<div class="ev-name">' + ev.name + '</div>' +
+        '<div class="ev-desc">' + ev.desc + '</div>' +
+        '<textarea id="' + id + '">' + ev.payload + '</textarea>' +
+        '<div class="ev-actions">' +
+        '<button class="btn btn-green btn-sm" onclick="emitEvent(\'' + ev.name + '\', \'' + id + '\')">Emit</button>' +
+        '<span class="status" id="st-' + id + '"></span>' +
+        '</div></div>';
+    });
+    html += '</div>';
+    div.innerHTML = html;
+    panel.appendChild(div);
+  });
+})();
+
+// ── Socket.IO ──
+function doConnect() {
+  if (socket && socket.connected) { doDisconnect(); }
+  var url = urlInput.value.trim();
+  if (!url) { alert('Enter a server URL'); return; }
+  socket = io(url, { transports: ['polling', 'websocket'], reconnection: false });
+
+  socket.on('connect', function() {
+    badge.textContent = 'connected'; badge.className = 'badge badge-on';
+    appendLog('connect', {sid: socket.id}, 'system');
+  });
+  socket.on('disconnect', function(reason) {
+    badge.textContent = 'disconnected'; badge.className = 'badge badge-off';
+    appendLog('disconnect', {reason: reason}, 'system');
+  });
+  socket.on('connect_error', function(err) {
+    badge.textContent = 'error'; badge.className = 'badge badge-off';
+    appendLog('connect_error', {error: String(err)}, 'error');
+  });
+
+  SERVER_EVENTS.forEach(function(ev) {
+    socket.on(ev, function(data) {
+      // Filter high-frequency events unless opted in
+      if (ev === 'rover_data' && !document.getElementById('chk-rover-data').checked) return;
+      if (ev === 'server_log' && !document.getElementById('chk-server-log').checked) return;
+      appendLog(ev, data, 'received');
+    });
+  });
+}
+
+function doDisconnect() {
+  if (socket) { socket.disconnect(); socket = null; }
+  badge.textContent = 'disconnected'; badge.className = 'badge badge-off';
+}
+
+function emitEvent(name, taId) {
+  if (!socket || !socket.connected) { alert('Not connected. Click Connect first.'); return; }
+  var raw = document.getElementById(taId).value;
+  var statusEl = document.getElementById('st-' + taId);
+  try {
+    var payload = JSON.parse(raw);
+    socket.emit(name, payload);
+    appendLog(name, payload, 'sent');
+    statusEl.textContent = 'Emitted ✓';
+    statusEl.style.color = '#22c55e';
+  } catch (e) {
+    statusEl.textContent = 'Invalid JSON: ' + e.message;
+    statusEl.style.color = '#f87171';
+  }
+  setTimeout(function() { statusEl.textContent = ''; }, 3000);
+}
+
+function appendLog(event, data, kind) {
+  var ts = new Date().toLocaleTimeString();
+  var el = document.createElement('div');
+  el.className = 'log-entry' + (kind === 'sent' ? ' log-sent' : '') + (kind === 'error' ? ' log-error' : '');
+  var preview = '';
+  try { preview = JSON.stringify(data, null, 2); if (preview.length > 500) preview = preview.slice(0, 500) + '…'; } catch(e) { preview = String(data); }
+  el.innerHTML = '<span class="ts">' + ts + '</span><span class="ev">' +
+    (kind === 'sent' ? '↑ ' : kind === 'error' ? '✖ ' : '↓ ') + event + '</span><pre>' + preview + '</pre>';
+  logDiv.prepend(el);
+  if (logDiv.children.length > 300) logDiv.lastElementChild.remove();
+}
+
+function clearLog() { logDiv.innerHTML = ''; }
+</script>
+</body>
+</html>
