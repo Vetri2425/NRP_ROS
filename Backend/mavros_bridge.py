@@ -32,7 +32,7 @@ from mavros_msgs.srv import (
     WaypointClear,
     WaypointSetCurrent,
 )
-from mavros_msgs.msg import Waypoint, WaypointReached
+from mavros_msgs.msg import State as MavrosState, Waypoint, WaypointReached
 
 TelemetryCallback = Callable[[Dict[str, Any]], None]
 
@@ -116,6 +116,11 @@ class MavrosBridge:
 
         # Track pending service call events so _on_close can abort them immediately
         self._pending_service_calls: Dict[int, tuple] = {}  # id(event) -> (event, result_holder)
+
+        # rclpy heartbeat fallback: updated by direct ROS2 subscription to /mavros/state.
+        # Initialized to 0.0 so it immediately times out if rclpy never starts — the
+        # fallback only activates once rclpy actually receives a heartbeat.
+        self._last_rclpy_heartbeat: float = 0.0
 
         # Suppress disconnect detection during heavy mission operations (waypoint upload, etc.)
         # When True, is_pixhawk_disconnect_detected() ignores telemetry timeout to avoid
@@ -222,7 +227,13 @@ class MavrosBridge:
             # Check telemetry timeout (MAVROS node crash detection)
             time_since_telemetry = time.time() - self._last_telemetry_time
             if time_since_telemetry > self._telemetry_timeout:
-                print(f"[MAVROS_BRIDGE] Telemetry timeout detected ({time_since_telemetry:.1f}s) - flagging for reconnection", flush=True)
+                # Before declaring disconnect, check rclpy fallback.
+                # If rclpy still receives /mavros/state heartbeats, rosbridge is
+                # congested but the rover is alive — do NOT trigger reconnection.
+                time_since_rclpy = time.time() - self._last_rclpy_heartbeat
+                if time_since_rclpy < self._telemetry_timeout:
+                    return False
+                print(f"[MAVROS_BRIDGE] Telemetry timeout detected ({time_since_telemetry:.1f}s) - rclpy also stale ({time_since_rclpy:.1f}s) - flagging for reconnection", flush=True)
                 return True
 
             return False
@@ -677,6 +688,16 @@ class MavrosBridge:
                 10  # QoS depth
             )
 
+            # Heartbeat fallback: subscribe to /mavros/state via rclpy (bypasses rosbridge).
+            # If rosbridge is congested but MAVROS is alive, this still receives heartbeats
+            # and prevents false disconnect detection.
+            self._rclpy_state_sub = self._rclpy_node.create_subscription(
+                MavrosState,
+                "/mavros/state",
+                self._handle_rclpy_heartbeat,
+                10
+            )
+
             # Spin rclpy in a background thread so futures can complete
             self._rclpy_spin_thread = threading.Thread(
                 target=self._rclpy_spin_loop, daemon=True
@@ -687,6 +708,11 @@ class MavrosBridge:
         except Exception as e:
             print(f"[MAVROS_BRIDGE] rclpy init failed, will use CLI fallback: {e}", flush=True)
             self._rclpy_ready = False
+
+    def _handle_rclpy_heartbeat(self, msg) -> None:
+        """rclpy-direct heartbeat from /mavros/state — bypasses rosbridge entirely."""
+        with self._lock:
+            self._last_rclpy_heartbeat = time.time()
 
     def _rclpy_spin_loop(self) -> None:
         """Background thread that spins the rclpy node so service futures resolve."""

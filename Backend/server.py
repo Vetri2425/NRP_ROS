@@ -1637,7 +1637,7 @@ def initialize_mission_controller():
         
         # Apply startup LED state
         if led_controller and not led_enabled:
-            led_controller.update_state("idle")
+            led_controller._send_off()
         
         return True
     except Exception as e:
@@ -1752,12 +1752,13 @@ def schedule_fast_emit():
 def get_rover_data():
     """Return complete rover data structure with all required fields."""
     try:
-        current_state.signal_strength = derive_signal_strength(
-            current_state.last_heartbeat, current_state.rc_connected
-        )
+        with mavros_telem_lock:
+            current_state.signal_strength = derive_signal_strength(
+                current_state.last_heartbeat, current_state.rc_connected
+            )
     except Exception as e:
         log_message(f"[get_rover_data] Failed to derive signal strength: {e}", "ERROR")
-    
+
     data = current_state.to_dict()
     
     # Add network telemetry (WiFi signal strength and LoRa status)
@@ -1784,12 +1785,11 @@ def get_rover_data():
 
     # Compute baseline age dynamically from last baseline timestamp if available
     try:
-        if getattr(current_state, 'rtk_baseline_ts', None) is not None:
-            age = time.time() - float(current_state.rtk_baseline_ts)
-            # Update the dataclass value so emitted dict contains current age
-            current_state.rtk_baseline_age = float(age)
-            # Ensure the emitted dict reflects updated value
-            data = current_state.to_dict()
+        with mavros_telem_lock:
+            if getattr(current_state, 'rtk_baseline_ts', None) is not None:
+                age = time.time() - float(current_state.rtk_baseline_ts)
+                current_state.rtk_baseline_age = float(age)
+                data['rtk_baseline_age'] = float(age)
     except Exception as e:
         log_message(f"[get_rover_data] Failed to compute baseline age: {e}", "ERROR")
 
@@ -1858,7 +1858,14 @@ async def maintain_mavros_connection():
                     bridge.clear_disconnect_flag()
                     bridge.close()
                     is_vehicle_connected = False
+                    # Safely shutdown mission controller before clearing reference
+                    _mc = mission_controller
                     mission_controller = None  # Reset so it re-initialises after reconnect
+                    if _mc is not None:
+                        try:
+                            _mc.shutdown()
+                        except Exception:
+                            pass
                     sync_emit('connection_status', {
                         'status': 'WAITING_FOR_ROVER',
                         'message': 'MAVROS telemetry lost - reconnecting...'
@@ -2779,8 +2786,9 @@ def download_mission_from_vehicle():
     """Download mission from vehicle."""
     global current_mission
     bridge = _require_vehicle_bridge()
-    if not mission_download_lock.acquire(blocking=False):
-        raise Exception("Another download in progress")
+    acquired = mission_download_lock.acquire(blocking=True, timeout=30.0)
+    if not acquired:
+        raise Exception("Mission download timeout - another download still in progress, please retry")
 
     try:
         sync_emit('mission_download_progress', {'progress': 5})
@@ -3554,9 +3562,13 @@ async def handle_command(sid, data, ack_callback=None):
         return
 
     try:
-        result = handler(data)
+        # Run blocking command handlers in a thread pool to avoid freezing
+        # the asyncio event loop (bridge calls like arm/set_mode/push_waypoints
+        # can block for seconds via roslibpy service calls).
+        loop = asyncio.get_event_loop()
+        result = await loop.run_in_executor(None, handler, data)
         response_payload = None
-        
+
         if isinstance(result, dict):
             response_payload = {**result, 'acked': True}
             record_activity(
@@ -3652,8 +3664,11 @@ async def handle_manual_control(sid, data, ack_callback=None):
         # Require MAVROS connection
         _require_vehicle_bridge()
 
-        # Delegate to handler
-        result = manual_control_handler.handle_command(data)
+        # Delegate to handler (run in executor — start_session() can block on
+        # bridge.set_mode/arm calls; subsequent commands are fast but we keep
+        # them off the event loop for safety).
+        loop = asyncio.get_event_loop()
+        result = await loop.run_in_executor(None, manual_control_handler.handle_command, data)
 
         # Handle response
         if result['status'] == 'success':
@@ -3877,7 +3892,7 @@ async def handle_set_led_controller(sid, data):
                 else:
                     led_controller.update_state("idle")
             else:
-                led_controller.update_state("idle")
+                led_controller._send_off()
 
         await sio.emit(
             "led_controller_changed",
@@ -4634,8 +4649,8 @@ async def api_mission_servo_config_test(request: Request):
     Request Body:
     {
         "servo_channel": 9,           // Servo channel (1-16)
-        "servo_pwm_on": 1900,         // PWM when ON (1000-2000)
-        "servo_pwm_off": 1100,        // PWM when OFF (1000-2000)
+        "servo_pwm_on": 1900,         // PWM when ON (0-4000)
+        "servo_pwm_off": 1100,        // PWM when OFF (0-4000)
         "servo_delay_before": 0.7,    // Delay before spray (0-30s)
         "servo_spray_duration": 6.0,  // Spray duration (0-30s)
         "servo_delay_after": 3.1      // Delay after spray (0-30s)
@@ -4786,14 +4801,14 @@ async def api_mission_servo_config_test(request: Request):
                     }
                 )
             
-            if pwm_val < 1000 or pwm_val > 2000:
+            if pwm_val < 0 or pwm_val > 4000:
                 return JSONResponse(
                     status_code=400,
                     content={
                         "success": False,
                         "message": f"Test FAILED - Invalid {pwm_name}",
                         "status": "fail",
-                        "error": f"Invalid {pwm_name} - must be between 1000 and 2000"
+                        "error": f"Invalid {pwm_name} - must be between 0 and 4000"
                     }
                 )
         
@@ -6166,14 +6181,23 @@ async def api_nodes():
     if not ROS_AVAILABLE:
         return _http_error("ROS 2 not available", 503)
     try:
-        import subprocess
-        result = subprocess.run(['ros2', 'node', 'list'], capture_output=True, text=True, timeout=10)
-        if result.returncode == 0:
-            nodes = result.stdout.strip().split('\n')
+        proc = await asyncio.create_subprocess_exec(
+            'ros2', 'node', 'list',
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+        try:
+            stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=10)
+        except asyncio.TimeoutError:
+            proc.kill()
+            await proc.communicate()
+            return _http_error("ros2 node list timed out", 504)
+        if proc.returncode == 0:
+            nodes = stdout.decode().strip().split('\n')
             nodes = [node.strip() for node in nodes if node.strip()]
             return {'nodes': nodes, 'count': len(nodes)}
         else:
-            return _http_error(f"Failed to list nodes: {result.stderr}", 500)
+            return _http_error(f"Failed to list nodes: {stderr.decode()}", 500)
     except Exception as exc:
         log_message(f"/api/nodes error: {exc}", "ERROR")
         return _http_error(str(exc), 500)
@@ -6184,13 +6208,20 @@ async def api_node_info(node_name: str):
     if not ROS_AVAILABLE:
         return _http_error("ROS 2 not available", 503)
     try:
-        import subprocess
-        # Use the same command that works in the terminal
-        result = subprocess.run(['ros2', 'node', 'info', node_name],
-                              capture_output=True, text=True, timeout=10)
-        if result.returncode == 0:
+        proc = await asyncio.create_subprocess_exec(
+            'ros2', 'node', 'info', node_name,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+        try:
+            stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=10)
+        except asyncio.TimeoutError:
+            proc.kill()
+            await proc.communicate()
+            return _http_error("ros2 node info timed out", 504)
+        if proc.returncode == 0:
             # Parse the output
-            lines = result.stdout.strip().split('\n')
+            lines = stdout.decode().strip().split('\n')
             info = {
                 'node_name': node_name,
                 'subscribers': [],
@@ -6231,7 +6262,7 @@ async def api_node_info(node_name: str):
 
             return info
         else:
-            return _http_error(f"Failed to get node info: {result.stderr}", 404)
+            return _http_error(f"Failed to get node info: {stderr.decode()}", 404)
     except Exception as exc:
         log_message(f"/api/node/{node_name} error: {exc}", "ERROR")
         return _http_error(str(exc), 500)

@@ -9,12 +9,12 @@
       "delay_after_spray": 0.5,
       "gps_timeout": 30,
       "auto_mode": true,
-      "servo_enabled": false,
-      "servo_pwm_on": 1100,
-      "servo_pwm_off": 1900,
-      "servo_delay_before": 0.5,
-      "servo_spray_duration": 0.2,
-      "servo_delay_after": 0.5
+      "servo_enabled": true,
+      "servo_pwm_on": 2000,
+      "servo_pwm_off": 1750,
+      "servo_delay_before": 0,
+      "servo_spray_duration": 5,
+      "servo_delay_after": 0
     },
     "mission_parameters": {
       "waypoint_reach_threshold": 2.0
@@ -34,6 +34,6 @@
   },
   "metadata": {
     "version": "1.0",
-    "last_updated": "2026-03-10 17:15:04"
+    "last_updated": "2026-03-11 18:09:03"
   }
 }

@@ -137,21 +137,26 @@ class ManualControlHandler:
             if not is_valid:
                 return {'status': 'error', 'message': error}
 
-            # Rate limiting
+            # Rate limiting and session check
             current_time = time.time()
+            needs_session_start = False
             with self.lock:
                 if current_time - self.last_command_time < (1.0 / self.config['rate_limit_hz']):
                     return {'status': 'dropped', 'message': 'Rate limit'}
 
-                # Start session if needed
                 if not self.is_active:
-                    if not self.start_session():
-                        return {'status': 'error', 'message': 'Failed to start session'}
+                    needs_session_start = True
+                else:
+                    self.last_command_time = current_time
+                    self._reset_watchdog()
 
-                self.last_command_time = current_time
-
-                # Reset watchdog
-                self._reset_watchdog()
+            # Start session OUTSIDE the lock (may call slow bridge set_mode/arm)
+            if needs_session_start:
+                if not self.start_session():
+                    return {'status': 'error', 'message': 'Failed to start session'}
+                with self.lock:
+                    self.last_command_time = current_time
+                    self._reset_watchdog()
 
             # Extract values
             left_throttle = float(data.get('left_throttle', 0.0))

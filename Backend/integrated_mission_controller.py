@@ -720,27 +720,29 @@ class IntegratedMissionController:
                 self.log(f"❌ Cannot start - no waypoints loaded", "error")
                 return {'success': False, 'error': 'No waypoints loaded'}
 
-            # ARM CHECK: Always verify armed state before starting mission.
-            # This ensures we use real-time state from MAVROS, not cached telemetry.
-            # ensure_pixhawk_armed() will return True immediately if already armed.
-            self.log("⚡ Verifying vehicle armed state before mission start...")
-            self.emit_status(
-                "Verifying vehicle armed state...",
-                "info",
-                extra_data={"event_type": "mission_arming"}
-            )
-            # Suppress disconnect detection during arm check (blocking bridge call)
-            self.bridge.suppress_disconnect_check(True)
-            try:
-                arm_ok = self.ensure_pixhawk_armed()
-            finally:
-                self.bridge.suppress_disconnect_check(False)
-            if not arm_ok:
-                msg = 'Arm failed. Mission cannot start until the vehicle is armed.'
-                self.log(f"❌ {msg}", "error")
-                self.emit_status(msg, "error", extra_data={"event_type": "mission_arm_error"})
-                return {'success': False, 'error': msg}
-            self.log("✅ Vehicle armed — proceeding with mission start")
+        # ARM CHECK outside the lock (blocking bridge call)
+        self.log("⚡ Verifying vehicle armed state before mission start...")
+        self.emit_status(
+            "Verifying vehicle armed state...",
+            "info",
+            extra_data={"event_type": "mission_arming"}
+        )
+        self.bridge.suppress_disconnect_check(True)
+        try:
+            arm_ok = self.ensure_pixhawk_armed()
+        finally:
+            self.bridge.suppress_disconnect_check(False)
+        if not arm_ok:
+            msg = 'Arm failed. Mission cannot start until the vehicle is armed.'
+            self.log(f"❌ {msg}", "error")
+            self.emit_status(msg, "error", extra_data={"event_type": "mission_arm_error"})
+            return {'success': False, 'error': msg}
+        self.log("✅ Vehicle armed — proceeding with mission start")
+
+        with self.lock:
+            # Re-check state after releasing/re-acquiring lock
+            if self.mission_state not in [MissionState.READY, MissionState.PAUSED, MissionState.IDLE, MissionState.STOPPED, MissionState.COMPLETED]:
+                return {'success': False, 'error': f'State changed during arm check: {self.mission_state.value}'}
 
             # Remember if we're resuming from pause
             was_paused = self.mission_state == MissionState.PAUSED
@@ -797,6 +799,7 @@ class IntegratedMissionController:
     
     def stop_mission(self) -> Dict[str, Any]:
         """Stop mission execution"""
+        need_servo_off = False
         with self.lock:
             if self.mission_state not in [MissionState.RUNNING, MissionState.PAUSED]:
                 return {'success': False, 'error': 'No mission running'}
@@ -814,13 +817,9 @@ class IntegratedMissionController:
             self.waiting_for_waypoint_reach = False
             self.home_set = False  # Reset HOME flag so it gets set again on restart
 
-            # Force servo OFF if continuous or dash mode is active
+            # Check if servo needs to be turned off
             if self.continuous_servo_active or self.dash_servo_on:
-                self.log("🔴 Forcing servo OFF due to mission stop")
-                try:
-                    self.bridge.set_servo(self.servo_channel, self.servo_pwm_off)
-                except Exception as e:
-                    self.log(f"Warning: servo OFF on stop failed: {e}", "warning")
+                need_servo_off = True
                 self.continuous_servo_active = False
                 self.dash_servo_on = False
 
@@ -836,20 +835,28 @@ class IntegratedMissionController:
             self.dash_distance_since_toggle = 0.0
             self.dash_last_toggle_time = None
 
-            # Set HOLD mode (suppress disconnect check for blocking bridge call)
-            self.bridge.suppress_disconnect_check(True)
+        # Blocking bridge calls OUTSIDE the lock
+        if need_servo_off:
+            self.log("🔴 Forcing servo OFF due to mission stop")
             try:
-                self.set_pixhawk_mode("HOLD")
-            finally:
-                self.bridge.suppress_disconnect_check(False)
+                self.bridge.set_servo(self.servo_channel, self.servo_pwm_off)
+            except Exception as e:
+                self.log(f"Warning: servo OFF on stop failed: {e}", "warning")
 
-            self.log('Mission stopped')
-            self.emit_status("Mission stopped", "info")
+        self.bridge.suppress_disconnect_check(True)
+        try:
+            self.set_pixhawk_mode("HOLD")
+        finally:
+            self.bridge.suppress_disconnect_check(False)
 
-            return {'success': True, 'message': 'Mission stopped'}
+        self.log('Mission stopped')
+        self.emit_status("Mission stopped", "info")
+
+        return {'success': True, 'message': 'Mission stopped'}
     
     def pause_mission(self) -> Dict[str, Any]:
         """Pause mission execution"""
+        need_servo_off = False
         with self.lock:
             if self.mission_state != MissionState.RUNNING:
                 return {'success': False, 'error': 'No mission running'}
@@ -865,27 +872,30 @@ class IntegratedMissionController:
             self.cancel_timers()
             self.waiting_for_waypoint_reach = False
 
-            # Force servo OFF if continuous or dash mode is active
+            # Check if servo needs to be turned off
             if self.continuous_servo_active or self.dash_servo_on:
-                self.log("🔴 Forcing servo OFF due to mission pause")
-                try:
-                    self.bridge.set_servo(self.servo_channel, self.servo_pwm_off)
-                except Exception as e:
-                    self.log(f"Warning: servo OFF on pause failed: {e}", "warning")
+                need_servo_off = True
                 self.continuous_servo_active = False
                 self.dash_servo_on = False
 
-            # Set HOLD mode (suppress disconnect check for blocking bridge call)
-            self.bridge.suppress_disconnect_check(True)
+        # Blocking bridge calls OUTSIDE the lock
+        if need_servo_off:
+            self.log("🔴 Forcing servo OFF due to mission pause")
             try:
-                self.set_pixhawk_mode("HOLD")
-            finally:
-                self.bridge.suppress_disconnect_check(False)
+                self.bridge.set_servo(self.servo_channel, self.servo_pwm_off)
+            except Exception as e:
+                self.log(f"Warning: servo OFF on pause failed: {e}", "warning")
 
-            self.log('Mission paused')
-            self.emit_status("Mission paused", "info")
-            
-            return {'success': True, 'message': 'Mission paused'}
+        self.bridge.suppress_disconnect_check(True)
+        try:
+            self.set_pixhawk_mode("HOLD")
+        finally:
+            self.bridge.suppress_disconnect_check(False)
+
+        self.log('Mission paused')
+        self.emit_status("Mission paused", "info")
+
+        return {'success': True, 'message': 'Mission paused'}
     
     def resume_mission(self) -> Dict[str, Any]:
         """Resume paused mission"""
@@ -917,17 +927,21 @@ class IntegratedMissionController:
             if not self.waypoints:
                 return {'success': False, 'error': 'No waypoints loaded'}
 
-            # ARM CHECK: vehicle may have auto-disarmed since last mission
-            self.bridge.suppress_disconnect_check(True)
-            try:
-                arm_ok = self.ensure_pixhawk_armed()
-            finally:
-                self.bridge.suppress_disconnect_check(False)
-            if not arm_ok:
-                msg = 'Arm failed. Mission cannot restart until the vehicle is armed.'
-                self.log(f"❌ {msg}", "error")
-                self.emit_status(msg, "error", extra_data={"event_type": "mission_arm_error"})
-                return {'success': False, 'error': msg}
+        # ARM CHECK outside the lock (blocking bridge call)
+        self.bridge.suppress_disconnect_check(True)
+        try:
+            arm_ok = self.ensure_pixhawk_armed()
+        finally:
+            self.bridge.suppress_disconnect_check(False)
+        if not arm_ok:
+            msg = 'Arm failed. Mission cannot restart until the vehicle is armed.'
+            self.log(f"❌ {msg}", "error")
+            self.emit_status(msg, "error", extra_data={"event_type": "mission_arm_error"})
+            return {'success': False, 'error': msg}
+
+        with self.lock:
+            if not self.waypoints:
+                return {'success': False, 'error': 'No waypoints loaded'}
 
             self.current_waypoint_index = 0
             self.cancel_timers()
@@ -1030,7 +1044,8 @@ class IntegratedMissionController:
         """
         if not self.rtk_monitoring_active or self.mission_state != MissionState.RUNNING:
             return
-        
+
+        need_hold = False
         try:
             with self.lock:
                 # Only check if in STRICT mode
@@ -1052,15 +1067,10 @@ class IntegratedMissionController:
                                     'action': 'mission_paused'
                                 }
                             )
-                            # Set HOLD mode immediately (suppress disconnect check for blocking call)
-                            self.bridge.suppress_disconnect_check(True)
-                            try:
-                                self.set_pixhawk_mode("HOLD")
-                            finally:
-                                self.bridge.suppress_disconnect_check(False)
                             self.mission_state = MissionState.PAUSED
+                            need_hold = True
                             self.log(f"⏸ Mission PAUSED - Awaiting RTK recovery", "warning")
-                        
+
                         self.last_known_good_rtk_fix_type = self.rtk_fix_type
                     else:
                         # RTK fix is good
@@ -1077,7 +1087,15 @@ class IntegratedMissionController:
                                 }
                             )
                         self.last_known_good_rtk_fix_type = 6
-        
+
+            # Blocking bridge call OUTSIDE the lock to avoid stalling other threads
+            if need_hold:
+                self.bridge.suppress_disconnect_check(True)
+                try:
+                    self.set_pixhawk_mode("HOLD")
+                finally:
+                    self.bridge.suppress_disconnect_check(False)
+
         except Exception as e:
             self.log(f"❌ RTK monitoring error: {e}", "error")
         
@@ -1160,13 +1178,20 @@ class IntegratedMissionController:
         with self.lock:
             if self.mission_state != MissionState.RUNNING:
                 return {'success': False, 'error': 'Mission not running'}
-            
+
             current_wp = self.current_waypoint_index
             self.log(f"Skipping waypoint {current_wp}", "info")
             self.emit_status(f"Skipping waypoint {current_wp}", "warning")
-            
-            self.proceed_to_next_waypoint()
-            return {'success': True, 'message': f'Skipped waypoint {current_wp}'}
+
+        # Set HOLD before clear/push so ArduPilot accepts mission commands
+        self.bridge.suppress_disconnect_check(True)
+        try:
+            self.set_pixhawk_mode("HOLD")
+        finally:
+            self.bridge.suppress_disconnect_check(False)
+
+        self.proceed_to_next_waypoint()
+        return {'success': True, 'message': f'Skipped waypoint {current_wp}'}
     
     def set_mode(self, mode: str) -> Dict[str, Any]:
         """Set mission mode (auto/manual/continuous/dash)"""
@@ -1864,45 +1889,52 @@ class IntegratedMissionController:
     
     def waypoint_reached(self):
         """Handle waypoint reached (called by either Pixhawk topic or distance fallback)"""
+        # Phase 1: State updates under lock
         with self.lock:
             if not self.waiting_for_waypoint_reach or self.mission_state != MissionState.RUNNING:
                 return
 
             self.waiting_for_waypoint_reach = False
             self.stop_periodic_status_logging()
-            
+
             # Cancel mission timeout
             if self.mission_timer:
                 self.mission_timer.cancel()
                 self.mission_timer = None
-            
+
             # Capture current position at waypoint arrival for accuracy calculation
             self.failsafe_position_at_arrival = self.current_position.copy() if self.current_position else None
-            
-            # Set HOLD mode (suppress disconnect check for blocking bridge call)
-            self.log(f'🛑 Setting HOLD mode')
-            self.bridge.suppress_disconnect_check(True)
-            try:
-                self.set_pixhawk_mode("HOLD")
-            finally:
-                self.bridge.suppress_disconnect_check(False)
+
+        # Phase 2: Blocking bridge call OUTSIDE the lock
+        self.log(f'🛑 Setting HOLD mode')
+        self.bridge.suppress_disconnect_check(True)
+        try:
+            self.set_pixhawk_mode("HOLD")
+        finally:
+            self.bridge.suppress_disconnect_check(False)
+
+        # Phase 3: Post-HOLD processing under lock
+        with self.lock:
+            # Re-check state — another thread may have stopped the mission while we were outside the lock
+            if self.mission_state != MissionState.RUNNING:
+                return
 
             # Record waypoint completion
             current_time = datetime.now().isoformat() + "Z"
             waypoint = self.waypoints[self.current_waypoint_index]
-            
+
             self.log(f'✅ WAYPOINT {self.current_waypoint_index + 1} REACHED')
             self.log(f'Position: lat={self.current_position["lat"]:.6f}, lng={self.current_position["lng"]:.6f}' if self.current_position else 'Position: unknown')
-            
+
             # GPS Failsafe check (only if mission is running and failsafe enabled)
             failsafe_triggered = False
             failsafe_reason = None
-            
+
             if self.mission_state == MissionState.RUNNING and self.failsafe_mode != "disable" and self.failsafe_monitor:
                 # We'll check failsafe conditions, but store result for later use in hold_period_complete
                 # For now, just log the conditions - the monitor state is managed by servo sequence
                 self.log(f"GPS Failsafe check will run after servo decision", "debug")
-            
+
             # Calculate accuracy error at waypoint arrival
             accuracy_error_mm = None
             if calculate_accuracy_error_mm is not None and waypoint and self.current_position:
@@ -1928,7 +1960,7 @@ class IntegratedMissionController:
                     "message": f"Waypoint {self.current_waypoint_index + 1} reached successfully"
                 }
             )
-            
+
             # Start hold period
             self.log(f'⏱ Starting {self.hold_duration}s hold period at waypoint {self.current_waypoint_index + 1}')
             self.hold_timer = threading.Timer(self.hold_duration, self.hold_period_complete)
@@ -2248,34 +2280,40 @@ class IntegratedMissionController:
     
     def waypoint_timeout(self):
         """Handle waypoint execution timeout"""
+        need_hold = False
+        wp_index = 0
+        error_msg = ""
         with self.lock:
             if self.mission_state == MissionState.RUNNING and self.waiting_for_waypoint_reach:
-                error_msg = f"Waypoint {self.current_waypoint_index + 1} execution timeout"
+                wp_index = self.current_waypoint_index
+                error_msg = f"Waypoint {wp_index + 1} execution timeout"
                 self.log(error_msg, "error")
                 self.mission_state = MissionState.ERROR
                 self.waiting_for_waypoint_reach = False
+                need_hold = True
 
-                # Set HOLD mode (suppress disconnect check for blocking bridge call)
-                self.bridge.suppress_disconnect_check(True)
-                try:
-                    self.set_pixhawk_mode("HOLD")
-                finally:
-                    self.bridge.suppress_disconnect_check(False)
-                
-                # Emit a failed marking event for the waypoint
-                fail_time = datetime.now().isoformat() + "Z"
-                self.emit_status(
-                    error_msg,
-                    "error",
-                    extra_data={
-                        "event_type": "waypoint_failed",
-                        "waypoint_id": self.current_waypoint_index + 1,
-                        "current_waypoint": self.current_waypoint_index + 1,
-                        "timestamp": fail_time,
-                        "failure_reason": "timeout",
-                        "message": error_msg
-                    }
-                )
+        # Blocking bridge call OUTSIDE the lock
+        if need_hold:
+            self.bridge.suppress_disconnect_check(True)
+            try:
+                self.set_pixhawk_mode("HOLD")
+            finally:
+                self.bridge.suppress_disconnect_check(False)
+
+            # Emit a failed marking event for the waypoint
+            fail_time = datetime.now().isoformat() + "Z"
+            self.emit_status(
+                error_msg,
+                "error",
+                extra_data={
+                    "event_type": "waypoint_failed",
+                    "waypoint_id": wp_index + 1,
+                    "current_waypoint": wp_index + 1,
+                    "timestamp": fail_time,
+                    "failure_reason": "timeout",
+                    "message": error_msg
+                }
+            )
     
     def set_home_position(self) -> bool:
         """Set HOME position using current rover position (called only once at mission start)"""
@@ -2661,18 +2699,20 @@ class IntegratedMissionController:
             return float('inf')  # Return large distance on error
     
     def cancel_timers(self):
-        """Cancel all active timers"""
-        if self.hold_timer:
-            self.hold_timer.cancel()
-            self.hold_timer = None
-        
-        if self.mission_timer:
-            self.mission_timer.cancel()
-            self.mission_timer = None
-        
-        if self.position_check_timer:
-            self.position_check_timer.cancel()
-            self.position_check_timer = None
+        """Cancel all active timers including RTK monitor.
+
+        Note: Only cancels timers (non-blocking). Does NOT join here because
+        timer callbacks (hold_period_complete, waypoint_timeout) acquire self.lock,
+        and callers of cancel_timers() already hold self.lock — joining would deadlock.
+        """
+        for timer in [self.hold_timer, self.mission_timer,
+                      self.position_check_timer, self.rtk_monitor_timer]:
+            if timer is not None:
+                timer.cancel()
+        self.hold_timer = None
+        self.mission_timer = None
+        self.position_check_timer = None
+        self.rtk_monitor_timer = None
     
     def get_status(self) -> Dict[str, Any]:
         """Get current mission status"""
@@ -2826,7 +2866,11 @@ class IntegratedMissionController:
 
     def shutdown(self):
         """Shutdown mission controller"""
+        # Capture timer refs and state before cancelling
+        need_hold = False
         with self.lock:
+            timers_to_join = [self.hold_timer, self.mission_timer,
+                              self.position_check_timer, self.rtk_monitor_timer]
             self.running = False
             self.stop_periodic_status_logging()
             self.cancel_timers()
@@ -2837,6 +2881,21 @@ class IntegratedMissionController:
                 self.obstacle_monitor.stop()
 
             if self.mission_state == MissionState.RUNNING:
-                self.set_pixhawk_mode("HOLD")
+                need_hold = True
 
             self.log("Mission controller shutdown")
+
+        # Blocking bridge call OUTSIDE the lock
+        if need_hold:
+            try:
+                self.set_pixhawk_mode("HOLD")
+            except Exception:
+                pass
+
+        # Join timers OUTSIDE the lock to avoid deadlock with timer callbacks
+        for timer in timers_to_join:
+            if timer is not None:
+                try:
+                    timer.join(timeout=1.0)
+                except Exception:
+                    pass
