@@ -9,6 +9,7 @@ that runs directly in your FastAPI server.py process.
 import threading
 import time
 import json
+import os
 from enum import Enum
 from typing import Dict, List, Optional, Any, Callable
 from datetime import datetime
@@ -36,7 +37,7 @@ except ImportError:
 
 class MissionState(Enum):
     IDLE = "idle"
-    LOADING = "loading" 
+    LOADING = "loading"
     READY = "ready"
     RUNNING = "running"
     PAUSED = "paused"
@@ -170,11 +171,83 @@ class IntegratedMissionController:
             self.obstacle_monitor = None
             self.log("Obstacle monitor not available (import failed)")
 
+        # Load persisted mission mode before the first status emission.
+        self._load_persisted_mission_mode()
+
         # Start telemetry subscription
         self.start_telemetry_subscription()
 
         self.log("Mission controller initialized")
         self.emit_status("Mission controller initialized", "info")
+        self.emit_status(
+            f"Loaded mission mode: {self.mission_mode.value}",
+            "info",
+            extra_data={"event_type": "mission_mode_loaded"}
+        )
+
+    def _config_file_path(self) -> str:
+        """Return absolute path to mission controller config."""
+        return os.path.join(os.path.dirname(__file__), 'config', 'mission_controller_config.json')
+
+    def _load_persisted_mission_mode(self):
+        """Load persisted mission mode from config system_settings."""
+        mode_map = {mode.value: mode for mode in MissionMode}
+        config_file = self._config_file_path()
+
+        try:
+            if not os.path.exists(config_file):
+                self.log("Mission mode config not found, using default AUTO", "info")
+                return
+
+            with open(config_file, 'r') as f:
+                config = json.load(f)
+
+            system_settings = config.get('system_settings', {})
+            configured_mode = str(system_settings.get('mission_mode', self.mission_mode.value)).strip().lower()
+            loaded_mode = mode_map.get(configured_mode)
+
+            if loaded_mode is None:
+                self.log(
+                    f"Invalid persisted mission_mode='{configured_mode}', using default {self.mission_mode.value}",
+                    "warning"
+                )
+                return
+
+            self.mission_mode = loaded_mode
+            self.log(f"Loaded persisted mission mode: {self.mission_mode.value}", "info")
+        except Exception as e:
+            self.log(f"Failed to load persisted mission mode: {e}", "warning")
+
+    def _persist_mission_mode(self, mode: MissionMode) -> bool:
+        """Persist mission mode into config system_settings for restart safety."""
+        config_file = self._config_file_path()
+        try:
+            if os.path.exists(config_file):
+                with open(config_file, 'r') as f:
+                    config = json.load(f)
+            else:
+                config = {
+                    "mission_controller": {},
+                    "system_settings": {},
+                    "metadata": {}
+                }
+
+            if 'system_settings' not in config:
+                config['system_settings'] = {}
+
+            config['system_settings']['mission_mode'] = mode.value
+            config['metadata'] = {
+                "version": "1.0",
+                "last_updated": time.strftime("%Y-%m-%d %H:%M:%S")
+            }
+
+            with open(config_file, 'w') as f:
+                json.dump(config, f, indent=2)
+
+            return True
+        except Exception as e:
+            self.log(f"Failed to persist mission mode '{mode.value}': {e}", "warning")
+            return False
     
     def log(self, message: str, level: str = "info"):
         """Log message with optional logger"""
@@ -1216,15 +1289,26 @@ class IntegratedMissionController:
                 
                 new_mode = mode_map[mode.lower()]
                 self.mission_mode = new_mode
+                persisted = self._persist_mission_mode(new_mode)
                 
                 # Log with SUCCESS level so it shows clearly in journalctl
                 self.log(f'MISSION MODE CHANGED: {old_mode.value} → {new_mode.value}', 'success')
-                self.emit_status(f"Mission mode set to {new_mode.value}", "success")
+                self.emit_status(
+                    f"Mission mode set to {new_mode.value}",
+                    "success",
+                    extra_data={
+                        "event_type": "mission_mode_changed",
+                        "persisted": persisted
+                    }
+                )
+                if not persisted:
+                    self.log("Mission mode changed in memory but failed to persist to config", "warning")
                 
                 return {
                     'success': True,
                     'message': f'Mode set to {new_mode.value}',
-                    'mode': new_mode.value
+                    'mode': new_mode.value,
+                    'persisted': persisted
                 }
                 
             except Exception as e:
@@ -2759,7 +2843,7 @@ class IntegratedMissionController:
             }
     
     def start_periodic_status_logging(self):
-        """Start periodic status logging at 2Hz (every 0.5 seconds)"""
+        """Start periodic status logging at 20Hz (every 0.05 seconds)"""
         if hasattr(self, '_status_logging_active') and self._status_logging_active:
             return
         
@@ -2799,12 +2883,12 @@ class IntegratedMissionController:
                 if progress_data is not None:
                     self.emit_status("Navigation progress", "info", extra_data=progress_data)
 
-                time.sleep(0.2)  # 5Hz = 0.2 seconds
+                time.sleep(0.05)  # 20Hz = 0.05 seconds
         
         # Start logging thread
         self._status_logging_thread = threading.Thread(target=log_status_periodically, daemon=True)
         self._status_logging_thread.start()
-        self.log(f"📊 Started periodic status logging at 2Hz")
+        self.log(f"📊 Started periodic status logging at 20Hz")
     
     def stop_periodic_status_logging(self):
         """Stop periodic status logging"""

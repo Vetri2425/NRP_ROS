@@ -913,6 +913,8 @@ class CurrentState:
     gps_failsafe_triggered: bool = False  # Whether failsafe has been triggered
     gps_failsafe_accuracy_error_mm: float = 0.0  # Accuracy error in mm
     gps_failsafe_servo_suppressed: bool = False  # Whether servo commands are suppressed
+    # Mission mode state
+    mission_mode: str = "auto"  # "auto", "manual", "continuous", or "dash"
 
     def to_dict(self) -> dict:
         d = asdict(self)
@@ -1424,6 +1426,8 @@ def handle_mission_status(status_data: dict):
             current_state.gps_failsafe_servo_suppressed = bool(status_data.get('gps_failsafe_servo_suppressed'))
         if 'gps_failsafe_accuracy_error_mm' in status_data:
             current_state.gps_failsafe_accuracy_error_mm = float(status_data.get('gps_failsafe_accuracy_error_mm', 0.0))
+        if 'mission_mode' in status_data:
+            current_state.mission_mode = str(status_data.get('mission_mode', current_state.mission_mode)).lower()
         
         # Sync distance to next waypoint from mission controller
         if 'distance_to_next_m' in status_data:
@@ -1618,6 +1622,12 @@ def initialize_mission_controller():
         # Apply loaded GPS failsafe mode from config
         mission_controller.set_failsafe_mode(current_state.gps_failsafe_mode)
         log_message(f"Integrated mission controller initialized with GPS failsafe: {current_state.gps_failsafe_mode}", "SUCCESS", event_type='mission')
+
+        # Sync mission mode snapshot after controller init
+        mc_mode = mission_controller.get_status().get('mission_mode', current_state.mission_mode)
+        if mc_mode in ['auto', 'manual', 'continuous', 'dash']:
+            current_state.mission_mode = mc_mode
+        log_message(f"Integrated mission controller initialized with mission mode: {current_state.mission_mode}", "SUCCESS", event_type='mission')
 
         # Apply loaded obstacle detection state from config
         config_file = os.path.join(os.path.dirname(__file__), 'config', 'mission_controller_config.json')
@@ -3321,6 +3331,12 @@ async def handle_connect(sid, environ):
             'timestamp': time.time()
         }, to=sid)
         log_message(f"📤 Sent GPS failsafe mode to new client: {current_state.gps_failsafe_mode}", "INFO")
+
+        await sio.emit('mission_mode_changed', {
+            'mode': current_state.mission_mode,
+            'timestamp': time.time()
+        }, to=sid)
+        log_message(f"📤 Sent mission mode to new client: {current_state.mission_mode}", "INFO")
 
         if is_vehicle_connected:
             log_message("Emitting 'CONNECTED_TO_ROVER' to NEW client...")
@@ -6589,6 +6605,18 @@ def load_system_settings():
             if gps_mode in ['disable', 'strict', 'relax']:
                 current_state.gps_failsafe_mode = gps_mode
                 log_message(f"✅ Loaded GPS failsafe mode from config: {gps_mode}", "INFO", event_type='config')
+
+            # Load mission mode
+            mission_mode = str(system_settings.get('mission_mode', 'auto')).lower()
+            if mission_mode in ['auto', 'manual', 'continuous', 'dash']:
+                current_state.mission_mode = mission_mode
+                log_message(f"✅ Loaded mission mode from config: {mission_mode}", "INFO", event_type='config')
+            else:
+                log_message(
+                    f"⚠️ Invalid mission_mode '{mission_mode}' in config, using default: {current_state.mission_mode}",
+                    "WARNING",
+                    event_type='config'
+                )
 
             # Load obstacle detection state (applied in initialize_mission_controller)
             obstacle_enabled = system_settings.get('obstacle_detection_enabled', False)

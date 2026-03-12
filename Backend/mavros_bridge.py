@@ -32,7 +32,7 @@ from mavros_msgs.srv import (
     WaypointClear,
     WaypointSetCurrent,
 )
-from mavros_msgs.msg import State as MavrosState, Waypoint, WaypointReached
+from mavros_msgs.msg import State as MavrosState, Waypoint, WaypointReached, RTCM
 
 TelemetryCallback = Callable[[Dict[str, Any]], None]
 
@@ -141,6 +141,7 @@ class MavrosBridge:
         self._rc_override_topic: Optional[roslibpy.Topic] = None
 
         self._rtcm_topic: Optional[roslibpy.Topic] = None
+        self._rtcm_pub_rclpy = None  # rclpy publisher for RTCM
         self._setpoint_topic: Optional[roslibpy.Topic] = None
 
         # Mission controller integration - REMOVED
@@ -647,15 +648,27 @@ class MavrosBridge:
     def send_rtcm(self, payload: bytes) -> None:
         if not payload:
             return
-        if self._rtcm_topic is None:
-            self._rtcm_topic = roslibpy.Topic(self._ros, "/mavros/gps_rtk/send_rtcm", "mavros_msgs/RTCM")
-            self._rtcm_topic.advertise()
-
-        message = roslibpy.Message({
-            "header": {"stamp": _ros_time(), "frame_id": "rtcm"},
-            "data": list(payload),
-        })
-        self._rtcm_topic.publish(message)
+        
+        # --- rclpy (stable, direct ROS2) ---
+        if self._rclpy_ready and self._rclpy_node is not None:
+            if self._rtcm_pub_rclpy is None:
+                self._rtcm_pub_rclpy = self._rclpy_node.create_publisher(RTCM, "/mavros/gps_rtk/send_rtcm", 10)
+            msg = RTCM()
+            msg.header.stamp = self._rclpy_node.get_clock().now().to_msg()
+            msg.header.frame_id = "rtcm"
+            msg.data = list(payload)
+            self._rtcm_pub_rclpy.publish(msg)
+            return
+        
+        # --- roslibpy fallback (legacy) ---
+        # if self._rtcm_topic is None:
+        #     self._rtcm_topic = roslibpy.Topic(self._ros, "/mavros/gps_rtk/send_rtcm", "mavros_msgs/RTCM")
+        #     self._rtcm_topic.advertise()
+        # message = roslibpy.Message({
+        #     "header": {"stamp": _ros_time(), "frame_id": "rtcm"},
+        #     "data": list(payload),
+        # })
+        # self._rtcm_topic.publish(message)
 
     def latest_waypoints(self) -> Optional[Dict[str, Any]]:
         with self._lock:
