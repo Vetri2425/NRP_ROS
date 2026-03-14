@@ -7,7 +7,7 @@ When the Pixhawk reboots or MAVROS node crashes, the server needs to be manually
 
 ### Cause 1: Pixhawk Disconnection
 The `maintain_mavros_connection()` loop checks if `bridge.is_connected` is True, which only verifies the rosbridge WebSocket connection. When Pixhawk reboots:
-1. MAVROS loses serial connection to Pixhawk (/dev/ttyUSB0 or /dev/ttyUSB0)
+1. MAVROS loses serial connection to Pixhawk (/dev/ttyACM0 or /dev/ttyACM0)
 2. MAVROS publishes `State` message with `connected=false`
 3. rosbridge WebSocket remains connected
 4. `bridge.is_connected` returns True (rosbridge is still up)

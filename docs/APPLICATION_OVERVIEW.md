@@ -126,7 +126,7 @@
 ### Connection Details
 
 - rosbridge WebSocket: `127.0.0.1:9090`
-- Pixhawk FCU: `/dev/ttyUSB0` at 115200 baud
+- Pixhawk FCU: `/dev/ttyACM0` at 115200 baud
 - MAVROS mode: APM (ArduPilot)
 
 ---
@@ -351,7 +351,7 @@ IDLE → MONITORING → TRIGGERED → AWAITING_ACK → STABLE_WINDOW → READY_R
 | Component | Interface | Details |
 |-----------|-----------|---------|
 | Jetson Orin Nano Super | — | Main compute platform |
-| Pixhawk FCU | `/dev/ttyUSB0` @ 115200 | ArduPilot firmware |
+| Pixhawk FCU | `/dev/ttyACM0` @ 115200 | ArduPilot firmware |
 | Servo outputs | Channels 9–14 | Sprayer PWM control |
 | GPS | via MAVROS | RTK-capable |
 | LoRa receiver | USB (CH340) | RTCM correction relay |
@@ -371,7 +371,7 @@ IDLE → MONITORING → TRIGGERED → AWAITING_ACK → STABLE_WINDOW → READY_R
 
 1. ROS2 environment (`/opt/ros/humble/setup.bash`)
 2. rosbridge_server (port 9090)
-3. MAVROS APM (`/dev/ttyUSB0:115200`)
+3. MAVROS APM (`/dev/ttyACM0:115200`)
 4. GPS Altitude Corrector (ROS2 node)
 5. Telemetry Node (ROS2 node)
 6. Backend server (FastAPI/uvicorn on port 5001)

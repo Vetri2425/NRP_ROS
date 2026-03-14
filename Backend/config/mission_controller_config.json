@@ -29,12 +29,12 @@
   },
   "system_settings": {
     "gps_failsafe_mode": "disable",
-    "mission_mode": "manual",
+    "mission_mode": "continuous",
     "obstacle_detection_enabled": false,
     "led_enabled": false
   },
   "metadata": {
     "version": "1.0",
-    "last_updated": "2026-03-12 14:58:36"
+    "last_updated": "2026-03-14 19:24:23"
   }
 }

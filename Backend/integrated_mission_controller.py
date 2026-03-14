@@ -109,6 +109,7 @@ class IntegratedMissionController:
         self.continuous_servo_active = False
         self.last_telemetry_position = None
         self.last_wp_seq_reached = 0
+        self.reached_waypoints: List[int] = []  # Track reached waypoint IDs (1-based) for resume
 
         # Dash mode specific
         self.dash_servo_on = False
@@ -277,7 +278,8 @@ class IntegratedMissionController:
             'current_waypoint': self.current_waypoint_index + 1 if self.waypoints else 0,
             'total_waypoints': len(self.waypoints),
             'current_position': self.current_position,
-            'pixhawk_state': self.pixhawk_state
+            'pixhawk_state': self.pixhawk_state,
+            'reached_waypoints': list(self.reached_waypoints)
         }
         
         # Calculate distance to next waypoint for CurrentState.distanceToNext
@@ -692,6 +694,7 @@ class IntegratedMissionController:
                 
                 self.waypoints = waypoints
                 self.current_waypoint_index = 0
+                self.reached_waypoints = []
                 self.log(f"📝 Setting mission state: IDLE → READY")
                 self.mission_state = MissionState.READY
                 
@@ -826,6 +829,7 @@ class IntegratedMissionController:
             # Only reset waypoint index if not resuming from pause
             if not was_paused:
                 self.current_waypoint_index = 0
+                self.reached_waypoints = []
             
             # Initialize failsafe monitor
             if self.failsafe_monitor:
@@ -923,7 +927,7 @@ class IntegratedMissionController:
             self.bridge.suppress_disconnect_check(False)
 
         self.log('Mission stopped')
-        self.emit_status("Mission stopped", "info")
+        self.emit_status("Mission stopped", "info", extra_data={"event_type": "mission_stopped"})
 
         return {'success': True, 'message': 'Mission stopped'}
     
@@ -966,7 +970,7 @@ class IntegratedMissionController:
             self.bridge.suppress_disconnect_check(False)
 
         self.log('Mission paused')
-        self.emit_status("Mission paused", "info")
+        self.emit_status("Mission paused", "info", extra_data={"event_type": "mission_paused"})
 
         return {'success': True, 'message': 'Mission paused'}
     
@@ -987,11 +991,36 @@ class IntegratedMissionController:
                 self.obstacle_monitor.start()
 
             self.log('Mission resumed')
-            self.emit_status("Mission resumed", "success")
-            
-            # Continue with current waypoint
-            self.execute_current_waypoint()
-            
+            self.emit_status("Mission resumed", "success", extra_data={"event_type": "mission_resumed"})
+
+            # Re-emit waypoint_reached events for all previously reached waypoints
+            # so frontend can reconstruct correct status after pause/resume
+            for wp_id in self.reached_waypoints:
+                self.emit_status(
+                    f"Waypoint {wp_id} reached",
+                    "info",
+                    extra_data={
+                        "event_type": "waypoint_reached",
+                        "waypoint_id": wp_id,
+                        "wp_seq": wp_id,
+                        "is_replay": True,
+                        "mode": self.mission_mode.value
+                    }
+                )
+
+            if self.multi_waypoint_mode:
+                # Continuous/dash: waypoints already on Pixhawk, just restore AUTO mode
+                self.log("🔄 Continuous mode resume: restoring AUTO mode (no re-upload)")
+                self.waiting_for_waypoint_reach = True
+                self.start_periodic_status_logging()
+                # Dash: reset toggle timer so servo doesn't instantly fire due to pause duration
+                if self.mission_mode == MissionMode.DASH and self.dash_last_toggle_time is not None:
+                    self.dash_last_toggle_time = time.time()
+                self.set_pixhawk_mode("AUTO")
+            else:
+                # Point-by-point: re-upload current waypoint
+                self.execute_current_waypoint()
+
             return {'success': True, 'message': 'Mission resumed'}
     
     def restart_mission(self) -> Dict[str, Any]:
@@ -1017,6 +1046,7 @@ class IntegratedMissionController:
                 return {'success': False, 'error': 'No waypoints loaded'}
 
             self.current_waypoint_index = 0
+            self.reached_waypoints = []
             self.cancel_timers()
             self.waiting_for_waypoint_reach = False
 
@@ -1024,9 +1054,12 @@ class IntegratedMissionController:
             self.mission_start_time = time.time()
 
             self.log('Mission restarted')
-            self.emit_status("Mission restarted", "success")
+            self.emit_status("Mission restarted", "success", extra_data={"event_type": "mission_restarted"})
 
-            self.execute_current_waypoint()
+            if self.mission_mode in [MissionMode.CONTINUOUS, MissionMode.DASH]:
+                self.execute_all_waypoints()
+            else:
+                self.execute_current_waypoint()
 
             return {'success': True, 'message': 'Mission restarted'}
     
@@ -1645,30 +1678,43 @@ class IntegratedMissionController:
             is_first = (wp_seq == 1)  # First mission waypoint
             is_last = (wp_seq == total_wps)  # Last mission waypoint
             
-            # Update current waypoint index for status reporting
-            self.current_waypoint_index = wp_seq - 1  # Convert to 0-based
-            
             self.log(f'🎯 Multi-WP reached: seq={wp_seq}, first={is_first}, last={is_last}')
-            
-            # Emit waypoint reached event with flags
+
+            # Set index to just-reached WP before emitting so current_waypoint is correct
+            self.current_waypoint_index = wp_seq - 1  # 0-based, just-reached
+
+            # Track this waypoint as reached for resume re-emission
+            if wp_seq not in self.reached_waypoints:
+                self.reached_waypoints.append(wp_seq)
+
+            # Emit waypoint reached event — include waypoint_id so frontend can mark it
             self.emit_status(
                 f"Waypoint {wp_seq} reached",
                 "info",
                 extra_data={
                     "event_type": "waypoint_reached",
+                    "waypoint_id": wp_seq,   # frontend looks for waypoint_id
                     "wp_seq": wp_seq,
                     "is_first": is_first,
                     "is_last": is_last,
                     "mode": self.mission_mode.value
                 }
             )
-            
+
+            # Advance index to next target so distance monitor tracks the right WP.
+            # If last, clear waiting flag so distance monitor stops.
+            if is_last:
+                self.waiting_for_waypoint_reach = False
+                # current_waypoint_index stays at last WP (already set above)
+            else:
+                self.current_waypoint_index = wp_seq  # Next WP index (0-based)
+
             # Dispatch to mode-specific handlers
             if self.mission_mode == MissionMode.CONTINUOUS:
                 self._handle_continuous_wp_reached(wp_seq, is_first, is_last)
             elif self.mission_mode == MissionMode.DASH:
                 self._handle_dash_wp_reached(wp_seq, is_first, is_last)
-            
+
             # Check if this was the last waypoint
             if is_last:
                 self.complete_mission()
@@ -1964,8 +2010,11 @@ class IntegratedMissionController:
                     # Topic didn't fire for configured timeout - use fallback
                     self.log(f'🚨 FALLBACK TRIGGERED: No Pixhawk topic after {self.fallback_zone_timeout_seconds}s in zone - using distance detection', 'warning')
                     self.log(f'✓ Waypoint {self.current_waypoint_index + 1} reached via FALLBACK distance check ({distance:.2f}m)')
-                    self.waypoint_reached()
                     del self._fallback_threshold_entry_time
+                    if self.multi_waypoint_mode:
+                        self._handle_multi_wp_reached(self.current_waypoint_index + 1)
+                    else:
+                        self.waypoint_reached()
         else:
             # Outside threshold - reset fallback timer
             if hasattr(self, '_fallback_threshold_entry_time'):
@@ -2009,6 +2058,11 @@ class IntegratedMissionController:
 
             self.log(f'✅ WAYPOINT {self.current_waypoint_index + 1} REACHED')
             self.log(f'Position: lat={self.current_position["lat"]:.6f}, lng={self.current_position["lng"]:.6f}' if self.current_position else 'Position: unknown')
+
+            # Track this waypoint as reached for resume re-emission
+            wp_id = self.current_waypoint_index + 1
+            if wp_id not in self.reached_waypoints:
+                self.reached_waypoints.append(wp_id)
 
             # GPS Failsafe check (only if mission is running and failsafe enabled)
             failsafe_triggered = False
@@ -2302,6 +2356,7 @@ class IntegratedMissionController:
 
             # PHASE 3 FIX: Complete state cleanup for restart capability
             self.current_waypoint_index = 0
+            self.reached_waypoints = []
             self.mission_start_time = None
             self.home_set = False
             self.waypoint_upload_time = None
@@ -2884,7 +2939,9 @@ class IntegratedMissionController:
                     self.emit_status("Navigation progress", "info", extra_data=progress_data)
 
                 time.sleep(0.05)  # 20Hz = 0.05 seconds
-        
+            # Thread exiting (paused or stopped) — clear flag so resume can restart
+            self._status_logging_active = False
+
         # Start logging thread
         self._status_logging_thread = threading.Thread(target=log_status_periodically, daemon=True)
         self._status_logging_thread.start()

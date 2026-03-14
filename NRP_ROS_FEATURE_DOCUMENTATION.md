@@ -548,7 +548,7 @@ NRP_ROS/
 | Component | Interface | Details |
 |-----------|-----------|---------|
 | Jetson Orin Nano Super | — | Main compute platform |
-| Pixhawk FCU | `/dev/ttyUSB0` @ 115200 | ArduPilot firmware |
+| Pixhawk FCU | `/dev/ttyACM0` @ 115200 | ArduPilot firmware |
 | Servo outputs | Channels 9–14 | Sprayer PWM control |
 | GPS | via MAVROS | RTK-capable |
 | LoRa receiver | USB (CH340) | RTCM correction relay |

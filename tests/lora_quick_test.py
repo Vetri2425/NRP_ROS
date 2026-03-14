@@ -41,7 +41,7 @@ def check_usb_direct():
 def try_screen():
     """Check if we can use screen to communicate"""
     # Try to find any available serial device
-    for dev in ["/dev/ttyUSB0", "/dev/ttyUSB0", "/dev/ttyS0"]:
+    for dev in ["/dev/ttyACM0", "/dev/ttyACM0", "/dev/ttyS0"]:
         if os.path.exists(dev):
             print(f"\n{dev} exists!")
             try:
@@ -120,7 +120,7 @@ Option 3: Use PyUSB to communicate directly with CH340
   Then modify test_lora_communication.py to use USB mode
 
 Option 4: Check if device is working but unresponsive
-  echo "AT" | sudo timeout 1 screen -S lora /dev/ttyUSB0 115200
+  echo "AT" | sudo timeout 1 screen -S lora /dev/ttyACM0 115200
 """)
 
 print("\nNext steps:")

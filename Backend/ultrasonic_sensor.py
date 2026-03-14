@@ -33,7 +33,7 @@ def find_serial_ports():
     # Common Jetson UART ports
     candidates = [
         "/dev/ttyTHS0", "/dev/ttyTHS1", "/dev/ttyTHS2",
-        "/dev/ttyUSB0", "/dev/ttyUSB1",
+        "/dev/ttyACM0", "/dev/ttyUSB1",
         "/dev/ttyAMA0", "/dev/ttyAMA1",
         "/dev/ttyS0", "/dev/ttyS1", "/dev/ttyS2",
     ]
