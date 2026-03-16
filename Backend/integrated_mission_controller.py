@@ -993,17 +993,21 @@ class IntegratedMissionController:
             self.log('Mission resumed')
             self.emit_status("Mission resumed", "success", extra_data={"event_type": "mission_resumed"})
 
-            # Re-emit waypoint_reached events for all previously reached waypoints
-            # so frontend can reconstruct correct status after pause/resume
+            # Re-emit waypoint_marked events for all previously reached waypoints
+            # so frontend can reconstruct correct status after pause/resume.
+            # Use waypoint_marked (final lifecycle state) not waypoint_reached
+            # (intermediate navigation state) — by pause time, each waypoint in
+            # reached_waypoints has already completed hold → servo → mark.
             for wp_id in self.reached_waypoints:
                 self.emit_status(
-                    f"Waypoint {wp_id} reached",
+                    f"Waypoint {wp_id} completed (replay)",
                     "info",
                     extra_data={
-                        "event_type": "waypoint_reached",
+                        "event_type": "waypoint_marked",
                         "waypoint_id": wp_id,
                         "wp_seq": wp_id,
                         "is_replay": True,
+                        "marking_status": "completed",
                         "mode": self.mission_mode.value
                     }
                 )
