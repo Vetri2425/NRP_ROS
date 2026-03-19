@@ -10,10 +10,10 @@
       "gps_timeout": 30,
       "auto_mode": true,
       "servo_enabled": true,
-      "servo_pwm_on": 2000,
+      "servo_pwm_on": 2300,
       "servo_pwm_off": 1750,
       "servo_delay_before": 0,
-      "servo_spray_duration": 5,
+      "servo_spray_duration": 1,
       "servo_delay_after": 0
     },
     "mission_parameters": {
@@ -28,13 +28,13 @@
     }
   },
   "system_settings": {
-    "gps_failsafe_mode": "disable",
+    "gps_failsafe_mode": "relax",
     "mission_mode": "auto",
     "obstacle_detection_enabled": false,
-    "led_enabled": false
+    "led_enabled": true
   },
   "metadata": {
     "version": "1.0",
-    "last_updated": "2026-03-16 11:08:05"
+    "last_updated": "2026-03-18 14:38:43"
   }
 }

@@ -1467,15 +1467,20 @@ def handle_mission_status(status_data: dict):
             if event_type == 'mission_loaded':
                 waypoints_count = status_data.get('waypoints_count', total_wp)
                 tts_msgs = {
-                    "en": f"Mission loaded, {waypoints_count} points",
-                    "ta": f"பணி ஏற்றப்பட்டது, {waypoints_count} இலக்குகள்",
-                    "hi": f"मिशन लोड हो गया, {waypoints_count} points",
+                    "en": "Mission loaded",
+                    "ta": "பணி ஏற்றப்பட்டது",
+                    "hi": "मिशन लोड हो गया",
                 }
                 tts_msg = tts_msgs.get(_lang, tts_msgs["en"])
                 tts.speak(tts_msg)
                 log_message(f"TTS: {tts_msg}", "DEBUG", event_type='tts')
+                # Pre-cache all waypoint audio in background
+                tts.precache_mission(waypoints_count)
 
             elif event_type == 'mission_started':
+                # Reset flags from previous mission
+                tts.mission_just_resumed = False
+                tts.mission_just_skipped = False
                 tts_msgs = {
                     "en": "Mission started, let's go",
                     "ta": "பணி தொடங்கியது, போகலாம்",
@@ -1483,13 +1488,25 @@ def handle_mission_status(status_data: dict):
                 }
                 tts_msg = tts_msgs.get(_lang, tts_msgs["en"])
                 tts.speak(tts_msg)
+                tts.speak("__delay:1.5")
                 log_message(f"TTS: {tts_msg}", "DEBUG", event_type='tts')
 
             elif event_type == 'waypoint_executing':
+                # If resuming, say "Mission resumed" first
+                if tts.mission_just_resumed:
+                    tts.mission_just_resumed = False
+                    _r_msgs = {"en": "Mission resumed.", "ta": "பணி மீண்டும் தொடங்கப்பட்டது.", "hi": "मिशन फिर से शुरू."}
+                    tts.speak(_r_msgs.get(_lang, _r_msgs["en"]))
+                    tts.speak("__delay:1.5")
+                if tts.mission_just_skipped:
+                    tts.mission_just_skipped = False
+                    _sk_msgs = {"en": "Waypoint skipped.", "ta": "இலக்கு தவிர்க்கப்பட்டது.", "hi": "वेपॉइंट स्किप हो गया."}
+                    tts.speak(_sk_msgs.get(_lang, _sk_msgs["en"]))
+                    tts.speak("__delay:1.0")
                 tts_msgs = {
-                    "en": f"Heading to target {current_wp} of {total_wp}",
-                    "ta": f"இலக்கு{current_wp} க்கு செல்கிறோம், மொத்தம் {total_wp}",
-                    "hi": f"लक्ष्य {current_wp} की तरफ जा रहे हैं, कुल {total_wp}",
+                    "en": f"Heading to target {current_wp}",
+                    "ta": f"இலக்கு {current_wp} க்கு செல்கிறோம்",
+                    "hi": f"लक्ष्य {current_wp} की तरफ जा रहे हैं",
                 }
                 tts_msg = tts_msgs.get(_lang, tts_msgs["en"])
                 tts.speak(tts_msg)
@@ -1529,24 +1546,27 @@ def handle_mission_status(status_data: dict):
                 log_message(f"TTS: {tts_msg}", "DEBUG", event_type='tts')
 
             elif event_type == 'mission_completed':
-                waypoints_completed = status_data.get('waypoints_completed', total_wp)
-                mission_duration = status_data.get('mission_duration', 0)
-                dur = int(mission_duration)
-                if mission_duration > 0:
-                    tts_msgs = {
-                        "en": f"Mission completed. {waypoints_completed} targets in {dur} seconds",
-                        "ta": f"பணி முடிந்தது. {waypoints_completed} இலக்குகள், {dur} விநாடிகள்",
-                        "hi": f"मिशन पूरा हुआ. {waypoints_completed} लक्ष्य, {dur} सेकंड में",
-                    }
-                else:
-                    tts_msgs = {
-                        "en": f"Mission completed. {waypoints_completed} targets",
-                        "ta": f"பணி முடிந்தது. {waypoints_completed} இலக்குகள்",
-                        "hi": f"मिशन पूरा हुआ. {waypoints_completed} लक्ष्य",
-                    }
+                tts_msgs = {
+                    "en": "Mission completed",
+                    "ta": "பணி முடிந்தது",
+                    "hi": "मिशन पूरा हुआ",
+                }
                 tts_msg = tts_msgs.get(_lang, tts_msgs["en"])
                 tts.speak(tts_msg)
                 log_message(f"TTS: {tts_msg}", "DEBUG", event_type='tts')
+
+            elif event_type == 'mission_mode_changed':
+                new_mode = status_data.get('mission_mode', '').lower()
+                mode_names = {
+                    "auto": {"en": "Auto mode", "ta": "ஆட்டோ மோட்", "hi": "ऑटो मोड"},
+                    "manual": {"en": "Manual mode", "ta": "மேனுவல் மோட்", "hi": "मैनुअल मोड"},
+                    "continuous": {"en": "Continuous mode", "ta": "தொடர் மோட்", "hi": "कंटीन्यूअस मोड"},
+                    "dash": {"en": "Dash mode", "ta": "டேஷ் மோட்", "hi": "डैश मोड"},
+                }
+                if new_mode in mode_names:
+                    tts_msg = mode_names[new_mode].get(_lang, mode_names[new_mode]["en"])
+                    tts.speak(tts_msg)
+                    log_message(f"TTS: {tts_msg}", "DEBUG", event_type='tts')
 
             elif event_type == 'mission_error':
                 error_msg = status_data.get('error_message', message)[:50]
@@ -1968,11 +1988,18 @@ def _handle_mavros_telemetry(message: dict) -> None:
                     _lang = os.environ.get("JARVIS_LANG", "en").strip().lower()
                     _greet = _greeting.get(_lang, _greeting["en"])
                     _init_msgs = {
-                        "en": f"Way to Mark initialised. {_greet}!",
-                        "ta": f"வே டு மார்க் தொடங்கப்பட்டது. {_greet}!",
-                        "hi": f"वे टू मार्क शुरू हो गया. {_greet}!",
+                        "en": "Way to Mark initialised!",
+                        "ta": "வே டு மார்க் தொடங்கப்பட்டது!",
+                        "hi": "वे टू मार्क शुरू हो गया!",
+                    }
+                    _greet_msgs = {
+                        "en": f"{_greet}!",
+                        "ta": f"{_greet}!",
+                        "hi": f"{_greet}!",
                     }
                     tts.speak(_init_msgs.get(_lang, _init_msgs["en"]))
+                    tts.speak("__delay:0.5")
+                    tts.speak(_greet_msgs.get(_lang, _greet_msgs["en"]))
                     logger.debug(f"TTS: {_init_msgs.get(_lang, _init_msgs['en'])}")
                 except Exception:
                     pass
@@ -4538,6 +4565,12 @@ def api_mission_stop():
         if err:
             return err
         _record_mission_event('Mission controller stopped', status='MISSION_STOPPED')
+        # Clear queued TTS and announce stop
+        tts.flush()
+        tts.mission_just_resumed = False
+        tts.mission_just_skipped = False
+        tts.speak("Mission stopped.")
+        print("[TTS] Mission stopped.", flush=True)
         return _http_success('Mission controller stopped')
     except Exception as exc:
         log_message(f"/api/mission/stop error: {exc}", "ERROR")
@@ -5029,7 +5062,10 @@ def api_mission_pause_frontend():
         if err:
             return err
         _record_mission_event('Mission paused (controller)', status='MISSION_PAUSED')
-        # Voice: Mission paused
+        # Clear queued TTS and announce pause immediately
+        tts.flush()
+        tts.mission_just_resumed = False
+        tts.mission_just_skipped = False
         try:
             _lang = os.environ.get("JARVIS_LANG", "en").strip().lower()
             _p_msgs = {"en": "Mission paused.", "ta": "பணி நிறுத்தப்பட்டது.", "hi": "मिशन रुक गया."}
@@ -5050,14 +5086,15 @@ def api_mission_resume_frontend():
         if err:
             return err
         _record_mission_event('Mission resumed (controller)', status='MISSION_RESUMED')
-        # Voice: Mission resumed
-        try:
+        # Check if continuous mode — speak resumed directly (no waypoint_executing fires)
+        if current_state.mission_mode in ('continuous', 'dash'):
             _lang = os.environ.get("JARVIS_LANG", "en").strip().lower()
             _r_msgs = {"en": "Mission resumed.", "ta": "பணி மீண்டும் தொடங்கப்பட்டது.", "hi": "मिशन फिर से शुरू."}
             tts.speak(_r_msgs.get(_lang, _r_msgs["en"]))
             print(f"[TTS] {_r_msgs.get(_lang, _r_msgs['en'])}", flush=True)
-        except Exception:
-            pass
+        else:
+            # Auto/manual: flag so waypoint_executing says "Mission resumed" then "Heading to target X"
+            tts.mission_just_resumed = True
         return _http_success('Mission resumed')
     except Exception as exc:
         log_message(f"/api/mission/resume error: {exc}", "ERROR")
@@ -5106,8 +5143,11 @@ def api_mission_next():
 def api_mission_skip():
     """Skip current waypoint and advance to the next waypoint/step."""
     try:
+        # Flag BEFORE publishing so waypoint_executing sees it
+        tts.mission_just_skipped = True
         ok, err = _publish_controller_cmd_or_error({'command': 'skip'})
         if err:
+            tts.mission_just_skipped = False
             return err
         _record_mission_event('Mission controller skipped waypoint', status='MISSION_SKIP')
         return _http_success('Skipped to next mission step')

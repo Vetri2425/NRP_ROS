@@ -1,0 +1,28 @@
+[Unit]
+Description=Piper TTS Server - Local Neural Text-to-Speech
+After=network.target
+Before=nrp-service.service
+
+[Service]
+Type=simple
+User=flash
+Group=flash
+ExecStart=/usr/bin/python3 -m piper.http_server --model /home/flash/.local/share/piper/models/en_US-ryan-medium.onnx --port 5111
+Restart=always
+RestartSec=5
+
+# Environment
+Environment=HOME=/home/flash
+Environment=PATH=/home/flash/.local/bin:/usr/local/bin:/usr/bin:/bin
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=piper-tts
+
+# Resource limits
+MemoryMax=1G
+CPUQuota=100%
+
+[Install]
+WantedBy=multi-user.target
